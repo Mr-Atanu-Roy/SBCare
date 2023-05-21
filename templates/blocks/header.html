@@ -1,0 +1,28 @@
+<header class="w-full sticky top-0 left-0 flex items-center justify-evenly py-5 px-3 bg-white z-50">
+
+    <div id="logo" class="transform -rotate-6 flex-col items-center justify-start">
+        <a href="{% url 'home' %}" class="text-5xl font-pacifico text-indigo-600">sb care</a>
+        <div class="w-3/4 h-1 bg-indigo-700 rounded-md"></div>
+    </div>
+    <div>
+        <ul class="flex items-center justify-between">
+            <li class="font-roboto text-xl mx-3.5 cursor-pointer" id="dropNavLink" onclick="dropdownNav()">
+                Products <span class="text-indigo-700"><i class="fa fa-caret-down"></i></span>
+                <ul id="navDropdown" class="hidden absolute py-5 px-5 rounded-md shadow-2xl font-roboto text-lg bg-white capitalize transition-all duration-200 ease-in-out">
+                    <li><a href="{% url 'url_short_api' %}" class="font-roboto mb-2.5">URL Short API <span class="text-indigo-700"><i class="fa fa-arrow-right"></i></span></a></li>
+                    <li><a href="#" class="font-roboto">More Comming Soon <span class="text-indigo-700"><i class="fa fa-arrow-right"></i></span></a></li>
+                </ul>
+            </li>
+            <li><a href="" class="font-roboto text-xl mx-3.5">About Us</a></li>
+            <li><a href="" class="font-roboto text-xl mx-3.5">Dashboard</a></li>
+        </ul>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="font-roboto text-lg uppercase py-3 px-7 text-white rounded-md font-bold shadow-md bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg transition duration-300 ease-in-out">LogOut</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="font-roboto text-lg uppercase py-3 px-7 text-white rounded-md font-bold shadow-md bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg transition duration-300 ease-in-out">LogIn</a>
+        {% endif %}
+    </div>
+
+</header>
