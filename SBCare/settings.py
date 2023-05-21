@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
 
 #setting a base URL
 BASE_URL = "http://127.0.0.1:8000/"
@@ -143,3 +144,19 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #for custom User Model
 AUTH_USER_MODEL = "accounts.User"
+
+#setting custom messages tags(tailwind css classes)
+MESSAGE_TAGS = {
+    messages.INFO: 'bg-orange-100 border-orange-400 text-orange-700',
+    messages.SUCCESS: 'bg-green-100 border-green-400 text-green-700',
+    messages.WARNING: 'bg-yellow-100 border-yellow-400 text-yellow-700',
+    messages.ERROR: 'bg-red-100 border-red-400 text-red-700',
+}
+
+#settings for sending mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') #app-password
