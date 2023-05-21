@@ -22,5 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="home"),
     path("auth/", include("accounts.urls")),
-    path("api/url-short", include("url_short_api.urls")),
+    path("r/", include("url_short_api.urls")),
 ]
