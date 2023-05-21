@@ -605,28 +605,16 @@ video {
   margin-bottom: 0.5rem;
 }
 
-.mb-2\.5{
-  margin-bottom: 0.625rem;
-}
-
 .mb-40{
   margin-bottom: 10rem;
 }
 
-.mr-0{
-  margin-right: 0px;
-}
-
-.mb-3{
-  margin-bottom: 0.75rem;
-}
-
-.mb-10{
-  margin-bottom: 2.5rem;
-}
-
 .mb-5{
   margin-bottom: 1.25rem;
+}
+
+.mr-0{
+  margin-right: 0px;
 }
 
 .block{

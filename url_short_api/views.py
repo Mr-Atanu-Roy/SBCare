@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import ShortURL
 from .serializers import ShortURLSerializer
@@ -13,7 +14,8 @@ from .serializers import ShortURLSerializer
 # Create your views here.
 
 class CreateShortURL(APIView):
-    permission_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def post(self, request, format=None):
         create_url_serializer = ShortURLSerializer(data=request.data, context={'user': request.user})
