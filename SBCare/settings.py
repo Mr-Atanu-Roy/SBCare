@@ -147,10 +147,10 @@ AUTH_USER_MODEL = "accounts.User"
 
 #setting custom messages tags(tailwind css classes)
 MESSAGE_TAGS = {
-    messages.INFO: 'bg-orange-100 border-orange-400 text-orange-700',
-    messages.SUCCESS: 'bg-green-100 border-green-400 text-green-700',
-    messages.WARNING: 'bg-yellow-100 border-yellow-400 text-yellow-700',
-    messages.ERROR: 'bg-red-100 border-red-400 text-red-700',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-error',
 }
 
 #settings for sending mail
