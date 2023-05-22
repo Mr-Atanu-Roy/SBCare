@@ -91,16 +91,16 @@ def login(request):
                             if user is not None:
                                 if not checkUser.is_verified:                                
                                     messages.warning(request, "Your email is not verified. Please verify it")
-                                else:
-                                    auth.login(request, user)
-                                    messages.success(request, "you are successfully logged in")
-                                    
-                                    email = password = ""
-                                    
-                                    if request.GET.get('next') != None:
-                                        return redirect(request.GET.get('next'))
-                                    
-                                    return redirect('home')
+                                
+                                auth.login(request, user)
+                                messages.success(request, "you are successfully logged in")
+                                
+                                email = password = ""
+                                
+                                if request.GET.get('next') != None:
+                                    return redirect(request.GET.get('next'))
+                                
+                                return redirect('profile')
                             else:
                                 messages.error(request, "Invalid credentials. Please check your email and password")
                         except User.DoesNotExist:
@@ -133,6 +133,12 @@ def logout(request):
     auth.logout(request)  
     messages.warning(request, "You are logged out now")  
     return redirect('login')
+
+
+@login_required(login_url="/auth/login")
+def profile(request):
+    # context = {}
+    return render(request, 'accounts/profile.html')
 
 
 def email_verify(request):

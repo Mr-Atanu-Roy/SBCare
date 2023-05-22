@@ -23,22 +23,11 @@
 </head>
 
 <body>
-    {% include './header.html' %}
 
     {% block body %}
 
     {% endblock body %}
-    <script>
-        function dropdownNav() {
-            let navDropdown = document.getElementById("navDropdown");
 
-            if(navDropdown.style.display == "none"){
-                navDropdown.style.display = "block";
-            }else{
-                navDropdown.style.display = "none";
-            }
-        }
-    </script>
 </body>
 
 </html>

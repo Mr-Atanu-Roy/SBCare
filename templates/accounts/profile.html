@@ -1,0 +1,42 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %}{{user.first_name|title}}'s Dashboard | SB Care{% endblock title %}
+
+{% block body %}
+
+<section id="profile" class="min-h-screen w-full flex justify-between">
+    {% include "../blocks/side_nav.html" %}
+    <div class="w-full min-h-screen ml-56">
+        <div class="py-5 px-3 bg-indigo-50 grid grid-cols-3 gap-3 font-light font-roboto">
+            <div>
+                Email - {{user.email}}
+            </div>
+            <div>
+                Plan - Free
+            </div>
+            <div>
+                Coins - 200
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">E-mail</label>
+                    <input type="text" name="email" value="{{email}}"
+                        class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm font-roboto font-light w-3/4" />
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">E-mail</label>
+                    <input type="text" name="email" value="{{email}}"
+                        class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm font-roboto font-light w-3/4" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% include '../blocks/dismissible_alert.html' %}
+
+{% endblock body %}
