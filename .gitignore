@@ -25,3 +25,7 @@ __pycache__/
 /env
 
 /static/css/tw_input.css
+
+*.pem
+
+*.sh
