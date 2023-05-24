@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 
 from .models import User, UserProfile
 from url_short_api.models import ShortURL
+from products.models import URLShorterProduct
 
 
 # Register your models here.
@@ -15,9 +16,13 @@ class TokenInline(admin.StackedInline):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     
-class ShortURLInline(admin.StackedInline):
+class ShortURLInline(admin.TabularInline):
     model = ShortURL
     extra = 0
+    
+class URLShorterProductInline(admin.TabularInline):
+    model = URLShorterProduct
+    extra = 1
     
 class UserAdmin(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'is_verified', 'last_login', 'is_staff')
@@ -39,7 +44,7 @@ class UserAdmin(admin.ModelAdmin):
         }),
     ]
     
-    inlines = [UserProfileInline, TokenInline, ShortURLInline]
+    inlines = [UserProfileInline, TokenInline, ShortURLInline, URLShorterProductInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'api_access', 'coins', 'gender', 'country', 'city')

@@ -18,7 +18,7 @@ class GetCreateShortURL(APIView):
     
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, format=None):
         short_urls = ShortURL.objects.filter(user=request.user)
         if short_urls:
@@ -36,7 +36,7 @@ class GetCreateShortURL(APIView):
                 "message": "no records"
             }
         
-        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response, status=status.HTTP_200_OK)
     
     def post(self, request, format=None):
         url_serializer = ShortURLSerializer(data=request.data, context={'user': request.user})

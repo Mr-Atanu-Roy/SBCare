@@ -22,6 +22,7 @@ def generate_unique_short_url():
 # Create your models here.
 class ShortURL(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    title = models.CharField(max_length=300, blank=True, null=True)
     original_url = models.URLField()
     short_url = models.CharField(max_length=50, null=True, blank=True, unique=True)
     
