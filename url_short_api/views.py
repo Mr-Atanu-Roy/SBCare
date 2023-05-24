@@ -14,6 +14,8 @@ from .serializers import ShortURLSerializer
 # Create your views here.
         
 class GetCreateShortURL(APIView):
+    '''This api will show and create urls'''
+    
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -60,6 +62,8 @@ class GetCreateShortURL(APIView):
             
 
 class GetUpdateDeleteShortURL(APIView):
+    '''This api will show, update, delete a perticular shorturl model instance'''
+    
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -113,6 +117,8 @@ class GetUpdateDeleteShortURL(APIView):
     
 
 def redirect_link(request, token):
+    '''Responsible for redirecting page to original url'''
+    
     try:
         short_url = settings.BASE_URL+f"r/{token}"
         get_url = ShortURL.objects.filter(short_url=short_url)
