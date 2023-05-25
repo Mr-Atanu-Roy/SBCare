@@ -4,7 +4,7 @@ from accounts.models import User
 
 
 class ShortURLSerializer(serializers.ModelSerializer):
-    original_url = serializers.CharField(max_length=500)
+    # original_url = serializers.CharField(max_length=500)
     
     class Meta:
         model = ShortURL
