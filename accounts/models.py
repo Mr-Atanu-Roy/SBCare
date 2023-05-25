@@ -5,6 +5,7 @@ from .manager import Usermanager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
+from rest_framework.authtoken.models import Token
 
 import uuid
 from .utils import SendEmail
@@ -66,9 +67,14 @@ class UserProfile(BaseModel):
 @receiver(post_save, sender=User)
 def User_created_handler(sender, instance, created, *args, **kwargs):
     '''
-    This signal will be executed each time a new user is created. This signal is responsible for creating new userProfile and sending email for email-verification
+    This signal will be executed each time a new user is created. This signal is responsible for generating a token for drf token auth and creating new userProfile and sending email for email-verification
     '''
-    if created:                
+    if created:    
+        
+        #generating token
+        Token.objects.create(user=instance)  
+        
+        #sending email          
         token = str(uuid.uuid4())
         subject = "Please verify your email"
         message = f"Hello!!! Thank you for signing up with us {instance.first_name}... Please verify your email : {instance.email} by clicking on the given link {settings.BASE_URL}auth/email-verify/{token}."
