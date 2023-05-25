@@ -57,6 +57,7 @@ def create_short_url_ajax(request):
                     # Send the POST request
                     response = requests.post(url, headers=headers, json=payload)
                     res_json = response.json()
+                    print(res_json)
                     if response.status_code == 201:
                         shorted_url = res_json["data"]["short_url"]
                         
@@ -106,35 +107,32 @@ def delete_short_url_ajax(request):
                 ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
                 
                 if ACCESS_TOKEN:
-                    try:
-                        headers = {
-                        "Authorization": f"Token {ACCESS_TOKEN}",
-                        "Content-Type": "application/json"
-                        }
-                        
-                        url = f"{settings.BASE_URL}r/api/short-url/{id}"
-                        
-                        # Send the DELETE request
-                        response = requests.delete(url, headers=headers)
-                        res_json = response.json()
-                        
-                        if response.status_code == 204:                           
-                            ret_res["data"] = res_json["data"]
-                            ret_res["message"] = res_json["message"]
-                            ret_res["status"] = response.status_code
-                        
-                        else:
-                            ret_res["error"] = res_json["detail"]
-                            ret_res["status"] = response.status_code
-                        
-                    except Exception as e:
-                        print(e) 
+                    
+                    headers = {
+                    "Authorization": f"Token {ACCESS_TOKEN}",
+                    "Content-Type": "application/json"
+                    }
+                    
+                    url = f"{settings.BASE_URL}r/api/short-url/{id}"
+                    
+                    # Send the DELETE request
+                    response = requests.delete(url, headers=headers)
+                    res_json = response.json()
+                    
+                    if response.status_code == 204:                           
+                        ret_res["data"] = res_json["data"]
+                        ret_res["message"] = res_json["message"]
+                        ret_res["status"] = response.status_code
+                    
+                    else:
+                        ret_res["error"] = res_json["detail"]
+                        ret_res["status"] = response.status_code
                     
                 else:
                     ret_res["error"] = "Invalid request"              
 
         
-                return JsonResponse(ret_res, safe=False)
+            return JsonResponse(ret_res, safe=False)
         
         else:
             return JsonResponse("Invalid request")
