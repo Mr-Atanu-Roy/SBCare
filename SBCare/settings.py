@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     #own
     'accounts',
     'products',
+    
     'url_short_api',
+    'qr_code_api',
 ]
 
 MIDDLEWARE = [
