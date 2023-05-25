@@ -40,7 +40,7 @@
     <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
         <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created URLS</h1>
         <div class="w-full" id="url-box-container">
-            {% if created_urls == None %}
+            {% if created_urls %}
             {% for url in created_urls %}
             <div class="url-box w-full flex-col justify-start items-center">
                 <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
