@@ -59,9 +59,12 @@
                             <a href="{{ url.original_url }}" target="_blank" class="hover:underline">
                                 {{url.original_url|slice:"38"}} {% if url.original_url|length > 38 %}...{% endif %}</a>
                         </div>
-                        <div class="text-sm font-roboto font-extralight">
+                        <div class="text-sm font-roboto font-extralight mb-1">
                             <a href="{{url.short_url}}" target="_blank"
                                 class="text-indigo-600 hover:underline">{{url.short_url}}</a>
+                        </div>
+                        <div class="text-sm font-roboto font-extralight">
+                            <span class="text-xs font-light">Source: {% if url.source == 'api-service' %} API Service {% else %} SB Care Product {% endif %}</span>
                         </div>
                     </div>
 
@@ -186,7 +189,6 @@
                 success: function (response) {
                     let message = response.message;
                     let error = response.error;
-
                     if (error != null) {
                         // alert(message+" Reload page to see changes");
                         alert(error);
