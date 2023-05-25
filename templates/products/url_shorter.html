@@ -10,7 +10,7 @@
 <div class="h-screen grid grid-cols-5 gap-4 sm:py-6">
     <div class="p-10 xs:p-0 mx-auto w-full col-span-3 flex items-center justify-center overflow-y-auto">
         <div class="w-full">
-            <h1 class="font-bold text-center text-2xl mb-5 font-roboto capitalize">Create new short URL</h1>
+            <h2 class="font-bold text-center text-2xl mb-5 font-roboto capitalize">Create new short URL</h2>
             <div class="w-full divide-y divide-gray-200">
                 <form method="post" action="" class="px-5 py-7">
                     {% csrf_token %}
@@ -40,6 +40,7 @@
     <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
         <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created URLS</h1>
         <div class="w-full" id="url-box-container">
+            {% if created_urls == None %}
             {% for url in created_urls %}
             <div class="url-box w-full flex-col justify-start items-center">
                 <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
@@ -71,6 +72,9 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+                <p class="font-roboto font-light">No URLs created till now</p>
+            {% endif %}
         </div>
     </div>
 </div>
