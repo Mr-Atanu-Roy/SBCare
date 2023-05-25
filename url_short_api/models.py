@@ -31,7 +31,7 @@ class ShortURL(BaseModel):
     title = models.CharField(max_length=300, blank=True, null=True)
     original_url = models.URLField()
     short_url = models.CharField(max_length=50, null=True, blank=True, unique=True)
-    source = models.CharField(choices=source_choices, max_length=255, default="product")
+    source = models.CharField(choices=source_choices, max_length=255, default="api-call")
     
     def __str__(self):
         return str(self.short_url)
