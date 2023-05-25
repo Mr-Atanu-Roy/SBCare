@@ -6,6 +6,12 @@ from django.conf import settings
 from accounts.models import BaseModel, User
 from .utils import generate_random_string
 
+
+source_choices = (
+    ("api-call", "api-call"),
+    ("product", "product"),
+)
+
 #utility func
 def generate_unique_short_url():
     unique = False
@@ -25,6 +31,7 @@ class ShortURL(BaseModel):
     title = models.CharField(max_length=300, blank=True, null=True)
     original_url = models.URLField()
     short_url = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    source = models.CharField(choices=source_choices, max_length=255, default="product")
     
     def __str__(self):
         return str(self.short_url)
