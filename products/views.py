@@ -64,7 +64,9 @@ def create_short_url_ajax(request):
                     if response.status_code == 201:
                         shorted_url = res_json["data"]["short_url"]
                         
-                        newURL = URLShorterProduct(user=request.user, original_url=dest, short_url=shorted_url)
+                        get_api = ShortURL.objects.filter(user=request.user, original_url=dest, short_url=shorted_url).first()
+                        
+                        newURL = URLShorterProduct(user=request.user, original_url=dest, short_url=shorted_url, url_api=get_api)
                         if title:
                             newURL.title = title
                         newURL.save()

@@ -9,7 +9,7 @@ class URLShorterProductAdmin(admin.ModelAdmin):
     fieldsets = [
         ("URL Details", {
             "fields": (
-                ['title', 'user', 'original_url', 'short_url']
+                ['title', 'user', 'url_api', 'original_url', 'short_url']
             ),
         }),
     ]

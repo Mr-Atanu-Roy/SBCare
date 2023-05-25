@@ -152,7 +152,7 @@
                         let message_block = `
                         <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
-                            <span class="block sm:inline">${message} Reload page to see them</span>
+                            <span class="block sm:inline">${message}. Reload page to see them</span>
                             </div>`;
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
@@ -197,7 +197,7 @@
 
         });
 
-        
+
         $("#modal-close").click(function (e) {
             e.preventDefault();
             $("#modal-container").css("display", "none");
