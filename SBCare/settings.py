@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    "django.contrib.humanize",
+    
     #third-party
     'rest_framework',
     'rest_framework.authtoken',
     
     #own
     'accounts',
+    'products',
     'url_short_api',
 ]
 

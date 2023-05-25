@@ -1,0 +1,217 @@
+{% extends '../blocks/base2.html' %}
+{% load humanize %}
+
+{% block title %} Short URL | SB Care {% endblock title %}
+
+
+
+{% block body %}
+
+<div class="h-screen grid grid-cols-5 gap-4 sm:py-6">
+    <div class="p-10 xs:p-0 mx-auto w-full col-span-3 flex items-center justify-center overflow-y-auto">
+        <div class="w-full">
+            <h1 class="font-bold text-center text-2xl mb-5 font-roboto capitalize">Create new short URL</h1>
+            <div class="w-full divide-y divide-gray-200">
+                <form method="post" action="" class="px-5 py-7">
+                    {% csrf_token %}
+
+                    <div id="message-box" class="hidden mb-6"></div>
+
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Title (Optional)</label>
+                    <input type="text" name="title" value="{{title}}" id="title"
+                        class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Destination</label>
+                    <input type="text" name="dest" value="{{dest}}" id="dest"
+                        class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+
+                    <div class="flex items-center justify-center mt-10">
+                        <button type="submit" name="create-url-submit" id="create-url-submit"
+                            class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full sm:w-3/4 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                            <span class="inline-block">Generate Short URL
+                                <i class="fa fa-link ml-3.5"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
+        <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created URLS</h1>
+        <div class="w-full" id="url-box-container">
+            {% for url in created_urls %}
+            <div class="url-box w-full flex-col justify-start items-center">
+                <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
+
+                    <div class="flex-col items-center justify-between mr-6">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="p-0.5 delete-url-btn" data-id="{{url.id}}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
+                        </form>
+                    </div>
+                    <div>
+                        <div class="text-xs font-roboto font-extralight mb-1.5">
+                            <span>{% if url.title %} <span class="font-semibold">{{url.title|title}}</span> -{%endif%}
+                                {{url.created_at | naturalday}}</span>
+                        </div>
+                        <div class="text-sm font-roboto font-extralight mb-1.5">
+                            <a href="{{ url.original_url }}" target="_blank" class="hover:underline">
+                                {{url.original_url|slice:"38"}} {% if url.original_url|length > 38 %}...{% endif %}</a>
+                        </div>
+                        <div class="text-sm font-roboto font-extralight">
+                            <a href="{{url.short_url}}" target="_blank"
+                                class="text-indigo-600 hover:underline">{{url.short_url}}</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="hidden relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal-container">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div
+                class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-teal-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fa fa-link h-6 w-6 text-teal-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                            <h3 class="text-base font-semibold font-roboto leading-6 text-gray-900" id="modal-title">
+                                Short Link Generated </h3>
+                            <div class="mt-2">
+                                <a href="" target="_blank" id="modal-link"
+                                    class="underline text-sm hover:text-indigo-600 font-roboto font-medium"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button type="button" id="modal-link-copy"
+                        class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto font-roboto"
+                        data-id="">Copy</button>
+                    <button type="button" id="modal-close"
+                        class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto font-roboto">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body %}
+
+{% block js %}
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //func to copy to clipboard
+        function copyToClipboard(text) {
+            var tempInput = $("<input>"); // Create a temporary input element
+            $("body").append(tempInput); // Append it to the body element
+            tempInput.val(text).select(); // Set the value and select the text
+            document.execCommand("copy"); // Copy the selected text to the clipboard
+            tempInput.remove(); // Remove the temporary input element
+        }
+
+        //handels creation of new URL
+        $("#create-url-submit").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'create-short-url-ajax' %}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    title: $("#title").val(),
+                    dest: $("#dest").val(),
+                },
+                success: function (response) {
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+
+                    if (error == null) {
+                        $("#message-box").css("display", "none");
+                        $("#modal-container").css("display", "block");
+                        $("#modal-link").html(data);
+                        $("#modal-link").attr("href", data);
+                        $("#modal-link-copy").data("id", data);
+
+                        let message_block = `
+                        <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message} Reload page to see them</span>
+                            </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
+
+                    } else {
+                        let message_block = `
+                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${error}</span>
+                        </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
+                    }
+
+
+                }
+            });
+
+        });
+
+        //handels deletion of new URL
+        $(document).on("click", ".delete-url-btn", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'delete-short-url-ajax' %}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    id: $(this).data("id"),
+                },
+                success: function (response) {
+                    let message = response.message;
+                    let error = response.error;
+
+                    if (error != null) {
+                        // alert(message+" Reload page to see changes");
+                        alert(error);
+                    }
+
+                }
+            });
+
+        });
+
+        
+        $("#modal-close").click(function (e) {
+            e.preventDefault();
+            $("#modal-container").css("display", "none");
+        });
+
+        $("#modal-link-copy").click(function (e) {
+            e.preventDefault();
+            var link = $(this).data("id");
+            copyToClipboard(link);
+
+            $("#modal-link-copy").html('Copied')
+        });
+
+    });
+</script>
+
+{% endblock js %}
