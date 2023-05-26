@@ -73,9 +73,12 @@ class OTP(BaseModel):
     purpose = models.CharField(choices=(("email_verify", "email_verify"), ("reset_password", "reset_password")), default="email_verify", max_length=255)
     is_used = models.BooleanField(default=False)
     
-    
     def __str__(self):
         return str(self.otp)
+    
+    
+    class Meta:
+        verbose_name_plural = "OTPs"
 
 
 
