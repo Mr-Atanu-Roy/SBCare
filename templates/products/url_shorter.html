@@ -130,7 +130,7 @@
                     if (data != null && message == "data fetched successfully") {
                         for (let index = data.length - 1; index >= 0; index--) {
                             let id = data[index]["id"];
-                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].slice(0, 15) + "....  ";
+                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].length > 15 ? data[index]["title"].slice(0, 15) + "....  " : data[index]["title"]+"  ";
                             let original_url = data[index]["original_url"];
                             let short_url = data[index]["short_url"];
                             let source = data[index]["source"] == "sbcare-product" ? "SB Care Product" : "API Service";
