@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.conf import settings
 
-from .models import User, UserProfile
-import uuid
+from django.utils import timezone
+from datetime import timedelta
 
-from .utils import current_time, check_str_special, SendEmail
+from .models import User, OTP
+from .utils import current_time, check_str_special
 
 # Create your views here.
 def signup(request):
@@ -44,6 +44,7 @@ def signup(request):
                                         fname = lname = email = password = cpassword = ""
                         
                                         messages.success(request, "Account created successfully. Check your email for verifying it")
+                                        
                                         return redirect('login')
                                     else:
                                         messages.error(request, "Your passwords do not match")
@@ -90,17 +91,17 @@ def login(request):
                             user = auth.authenticate(email = email, password = password)
                             if user is not None:
                                 if not checkUser.is_verified:                                
-                                    messages.warning(request, "Your email is not verified. Please verify it")
+                                    messages.warning(request, "Your email is not verified. Please verify it to login")
+                                else:
+                                    auth.login(request, user)
+                                    messages.success(request, "you are successfully logged in")
                                 
-                                auth.login(request, user)
-                                messages.success(request, "you are successfully logged in")
+                                    email = password = ""
                                 
-                                email = password = ""
-                                
-                                if request.GET.get('next') != None:
-                                    return redirect(request.GET.get('next'))
-                                
-                                return redirect('profile')
+                                    if request.GET.get('next') != None:
+                                        return redirect(request.GET.get('next'))
+                                    
+                                    return redirect('profile')
                             else:
                                 messages.error(request, "Invalid credentials. Please check your email and password")
                         except User.DoesNotExist:
@@ -160,19 +161,10 @@ def email_verify(request):
                             if getUser.is_verified:
                                 messages.warning(request, "This email is already verified")
                             else:
-                                token = str(uuid.uuid4())
+                                newOTP = OTP(user=getUser)
+                                newOTP.save()
                                 
-                                user_profile = getUser.profile
-                                user_profile.auth_token = token
-                                user_profile.save()
-
-
-                                subject = "Please verify your email"
-                                message = f"Please verify your email by clicking on the link provided: {settings.BASE_URL}auth/email-verify/{token}"
-                                messages.success(request, f"Email verification link send to {email}")
-                                
-                                #starting the thread to send email
-                                SendEmail(subject, message, email).start()
+                                messages.success(request, f"Email verification link send to {email}.  Link will be expired after 15min.")
                                                         
                         else:
                             messages.error(request, "No account exist with this email")
@@ -192,22 +184,105 @@ def email_verify(request):
 
 def email_verify_link(request, token):
     try:
-        profileObj = UserProfile.objects.filter(auth_token = token).first()
+        start_datetime = timezone.now() - timedelta(minutes=14)
+        verify_otp = OTP.objects.filter(otp=token, purpose='email_verify', is_used=False, created_at__gte=start_datetime).first()
         
-        if profileObj:
-            if profileObj.user.is_verified:
-                messages.warning(request, "Your account is already verified")
-            else:
-                profileObj.user.is_verified = True
-                profileObj.user.save()
-                messages.success(request, "Your account is now verified. Please Login")
+        if verify_otp:
+            get_user = User.objects.filter(email=verify_otp.user).first()
+            if get_user:
+                if get_user.is_verified:
+                    messages.warning(request, "This account is already verified")
+                    return redirect('login')
+                else:
+                    get_user.is_verified = True
+                    get_user.save()
+                    
+                    verify_otp.is_used = True
+                    verify_otp.save()
+                    messages.success(request, "Email verified. Now you can login")
         else:
-            messages.error(request, "Invalid request")
+            messages.error(request, "Invalid Link. Link may be expired")
             
         
     except Exception as e:
+        print(e)
         messages.error(request, "Something Went Wrong")
         
     
     return redirect('login')
 
+
+def reset_password(request):
+    email = ""
+    context = {}
+    try:
+        if request.user.is_authenticated:
+            messages.warning(request, "You are already logged in")
+            return redirect('home')
+        
+        if request.method=="POST":
+            email = request.POST.get("email")
+            if email != "":
+                getUser = User.objects.filter(email=email).first()
+                if getUser:
+                    if getUser.is_verified:
+                        newOTP = OTP(user=getUser, purpose="reset_password")
+                        newOTP.save()
+                        
+                        messages.success(request, f"Password reset link send to {email}.  Link will be expired after 15min.")
+                    else:
+                        messages.error(request, "This email is not verified. Verify it to perform all acivities")
+                else:
+                    messages.error(request, "No account exists with this email")
+            else:
+                messages.error(request, "Email is required")
+            
+            
+    except Exception as e:
+        pass
+    
+    
+    context["email"] = email
+    
+    return render(request, './accounts/reset_password.html', context)
+
+
+def reset_password_link(request, token):
+    password = cpassword = ""
+    context = {}
+    try:
+        start_datetime = timezone.now() - timedelta(minutes=14)
+        verify_otp = OTP.objects.filter(otp=token, purpose='reset_password', is_used=False, created_at__gte=start_datetime).first()
+        
+        if verify_otp:
+            get_user = User.objects.filter(email=verify_otp.user).first()
+            if get_user:
+                
+                if request.method=="POST":
+                    password = request.POST.get("password")
+                    cpassword = request.POST.get("cpassword")
+                    if password==cpassword:
+                        get_user.set_password(password)
+                        get_user.save()
+                        
+                        verify_otp.is_used = True
+                        verify_otp.save()
+                        messages.success(request, "Password changed. Now you can login")
+                        
+                        return redirect('login')
+                    else:
+                        messages.error(request, "Passwords don't match")
+                        
+        else:
+            messages.error(request, "Invalid Link. Link may be expired")
+            
+        
+    except Exception as e:
+        print(e)
+        messages.error(request, "Something Went Wrong")
+        
+    
+    context["password"] = password
+    context["cpassword"] = cpassword
+    
+    return render(request, './accounts/reset_password_link.html', context)

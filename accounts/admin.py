@@ -2,13 +2,17 @@ from django.contrib import admin
 
 from rest_framework.authtoken.models import Token
 
-from .models import User, UserProfile
+from .models import User, UserProfile, OTP
 from url_short_api.models import ShortURL
 from qr_code_api.models import QRCode
 
 
 # Register your models here.
 
+class OTPInline(admin.StackedInline):
+    model = OTP
+    extra = 0
+    
 class TokenInline(admin.StackedInline):
     model = Token
     extra = 0
@@ -45,7 +49,7 @@ class UserAdmin(admin.ModelAdmin):
         }),
     ]
     
-    inlines = [UserProfileInline, TokenInline, ShortURLInline, QRCodeInline]
+    inlines = [OTPInline, UserProfileInline, TokenInline, ShortURLInline, QRCodeInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
@@ -60,9 +64,14 @@ class UserProfileAdmin(admin.ModelAdmin):
                 ['country', 'city', 'address1', 'address2']
             )
         }),
-        ("Verifying Token", {
+    ]
+    
+class OTPAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'otp', 'purpose', 'is_used', 'created_at')
+    fieldsets = [
+        ("OTP Details", {
             "fields": (
-                ['auth_token']
+                ['user', 'purpose', 'is_used']
             ),
         }),
     ]
@@ -70,4 +79,5 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(OTP, OTPAdmin)
 
