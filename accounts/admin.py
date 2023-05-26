@@ -26,7 +26,7 @@ class QRCodeInline(admin.TabularInline):
 
     
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'is_verified', 'last_login', 'is_staff')
+    list_display = ('id', 'email', 'first_name', 'is_verified', 'last_login', 'is_staff')
     fieldsets = [
         ("User Details", {
             "fields": (
@@ -48,7 +48,7 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [UserProfileInline, TokenInline, ShortURLInline, QRCodeInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'api_access', 'coins', 'gender', 'country', 'city')
+    list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
     fieldsets = [
         ("User Details", {
             "fields": (

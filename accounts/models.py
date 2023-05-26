@@ -62,6 +62,9 @@ class UserProfile(BaseModel):
     
     def __str__(self):
         return str(self.user)
+    
+    class Meta:
+        verbose_name_plural = "User Profile"
 
 
 @receiver(post_save, sender=User)

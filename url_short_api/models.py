@@ -36,6 +36,9 @@ class ShortURL(BaseModel):
     def __str__(self):
         return str(self.short_url)
     
+    class Meta:
+        verbose_name_plural = "URL Shorter API"
+    
     
     
 #signals
