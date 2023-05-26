@@ -7,7 +7,7 @@ class QRCodeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QRCode
-        exclude = ['id', 'user', 'created_at', 'updated_at', 'source']
+        exclude = ['user', 'updated_at']
         extra_kwargs = {
             'id': {'read_only': True},
             'qr_code': {'read_only': True}
@@ -35,8 +35,9 @@ class QRCodeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['user']
         source = validated_data.get('source')
-        
+
         if source is not None:
+            del validated_data["source"]
             return QRCode.objects.create(user=user, source=source, **validated_data)
         else:
             return QRCode.objects.create(user=user, **validated_data)

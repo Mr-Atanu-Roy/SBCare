@@ -48,7 +48,7 @@ class GetCreateQR(APIView):
             response = {
                 "status": status.HTTP_201_CREATED,
                 "data": url_serializer.data,
-                "message": "URL created successfully"
+                "message": "QR created successfully"
             }
             return Response(response, status=status.HTTP_201_CREATED)
         
