@@ -7,8 +7,9 @@ class ShortURLSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ShortURL
-        fields = ['title', 'original_url', 'short_url', 'source', 'created_at']
+        fields = ['id', 'title', 'original_url', 'short_url', 'source', 'created_at']
         extra_kwargs = {
+            'id': {'read_only': True},
             'short_url': {'read_only': True},
             'created_at': {'read_only': True},
         }
@@ -18,7 +19,7 @@ class ShortURLSerializer(serializers.ModelSerializer):
         source = validated_data.get('source')
         
         if source is not None:
-            return ShortURL.objects.create(user=user, original_url=validated_data.get('original_url'), source=source)
+            return ShortURL.objects.create(user=user, original_url=validated_data.get('original_url'), source=source, title=validated_data.get('title'))
         else:
-            return ShortURL.objects.create(user=user, original_url=validated_data.get('original_url'))
+            return ShortURL.objects.create(user=user, original_url=validated_data.get('original_url'), title=validated_data.get('title'))
             
