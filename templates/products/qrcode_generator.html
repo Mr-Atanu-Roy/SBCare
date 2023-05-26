@@ -1,0 +1,349 @@
+{% extends '../blocks/base2.html' %}
+
+{% block title %} Generate QR Code | SB Care {% endblock title %}
+
+
+
+{% block body %}
+
+<div class="h-screen grid grid-cols-5 gap-4 sm:py-6">
+    <div class="p-10 xs:p-0 mx-auto w-full col-span-3 flex items-center justify-center overflow-y-auto">
+        <div class="w-full">
+            <h2 class="font-bold text-center text-2xl mb-5 font-roboto capitalize">Create a new QR</h2>
+            <div class="w-full divide-y divide-gray-200">
+                <form method="post" action="" class="px-5 py-7">
+                    {% csrf_token %}
+
+                    <div id="message-box" class="hidden mb-6"></div>
+
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Title</label>
+                    <input type="text" name="title" value="{{title}}" id="title"
+                        class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Type</label>
+                    <select type="text" name="type" value="{{type}}" id="type"
+                        class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-2 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light">
+                        <option value="url" selected>URL</option>
+                        <option value="wifi">WIFI</option>
+                        <option value="me-card">Me Card</option>
+                    </select>
+                    <div id="url-type">
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">URL</label>
+                        <input type="url" name="url" value="{{url}}" id="url"
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                    </div>
+                    <div id="wifi-type" class="grid grid-cols-3 gap-3 hidden">
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">SSID</label>
+                            <input type="text" name="ssid" value="{{ssid}}" id="ssid"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                        </div>
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Security</label>
+                            <select type="text" name="security" value="{{security}}" id="security"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light">
+                                <option value="wpa" selected>WPA</option>
+                                <option value="wep">WEP</option>
+                                <option value="wpa2">WPA2</option>
+                                <option value="wpa3">WPA3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Password</label>
+                            <input type="text" name="password" value="{{password}}" id="password"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                        </div>
+                    </div>
+                    <div id="me-card-type" class="grid grid-cols-3 gap-3 hidden">
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Name</label>
+                            <input type="text" name="name" value="{{name}}" id="name"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                        </div>
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Email</label>
+                            <input type="email" name="email" value="{{email}}" id="email"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                        </div>
+                        <div>
+                            <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Phone</label>
+                            <input type="text" name="phone" value="{{phone}}" id="phone"
+                                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded-sm px-3 py-2.5 mt-1 mb-8 text-sm w-full font-roboto font-light" />
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center mt-10">
+                        <button type="submit" name="create-qr-submit" id="create-qr-submit"
+                            class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full sm:w-3/4 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                            <span class="inline-block">Generate QR Code
+                                <i class="fa fa-qrcode ml-3"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
+        <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created QRs</h1>
+        <div class="w-full" id="qr-box-container">
+        </div>
+    </div>
+</div>
+
+<div class="hidden relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal-container">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div
+                class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="h-16 w-16">
+                            <a href="" target="_blank" id="qr-modal-link"><img src="" alt="test" class="w-full" id="qr-modal-img"></a>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                            <h3 class="text-base font-semibold font-roboto leading-6 text-gray-900" id="modal-title">
+                                QR Code Generated </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <a href="" id="modal-qr-download" download>
+                        <button type="button"
+                        class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto font-roboto">Download</button>
+                    </a>
+                    <button type="button" id="modal-close"
+                        class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto font-roboto">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body %}
+
+{% block js %}
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        //change visibility of blocks
+        $("#type").on("change", function () {
+            if ($("#type").val() == "wifi") {
+                $("#url-type").css("display", "none");
+                $("#wifi-type").css("display", "grid");
+                $("#me-card-type").css("display", "none");
+            } else if ($("#type").val() == "me-card") {
+                $("#url-type").css("display", "none");
+                $("#wifi-type").css("display", "none");
+                $("#me-card-type").css("display", "grid");
+            } else {
+                $("#url-type").css("display", "block");
+                $("#wifi-type").css("display", "none");
+                $("#me-card-type").css("display", "none");
+            }
+        });
+
+        //func to humanize dates
+        function humanizeDateTime(dateTimeString) {
+            const currentDate = new Date();
+            const date = new Date(dateTimeString);
+
+            const timeDiff = currentDate.getTime() - date.getTime();
+            const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Number of days difference
+
+            if (dayDiff === 0) {
+                return "today";
+            } else if (dayDiff === 1) {
+                return "yesterday";
+            } else {
+                return dayDiff + " days ago";
+            }
+        }
+
+        //func to load created QRs
+        function loadCreatedQRs() {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'get-qrcode-ajax' %}",
+                success: function (response) {
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+                    let content = ``;
+                    if (data != null && message == "data fetched successfully") {
+                        for (let index = data.length - 1; index >= 0; index--) {
+                            let id = data[index]["id"];
+                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].length > 15 ? data[index]["title"].slice(0, 15) + "....  " : data[index]["title"] + "  ";
+                            let source = data[index]["source"] == "sbcare-product" ? "SB Care Product" : "API Service";
+                            let qr_code = data[index]["qr_code"];
+                            let created_at = data[index]["created_at"];
+                            let type = data[index]["type"];
+
+                            content += `
+                            <div class="url-box w-full flex-col justify-start items-center">
+                                <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
+
+                                    <div class="flex-col items-center justify-between mr-6">
+                                        <button type="submit" class="block p-0.5 delete-qr-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
+                                        <button class="block p-0.5" data-id="${id}"><a href="${qr_code}" download><i class="fa fa-download text-indigo-700 cursor-pointer"></i></a></button>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-roboto font-extralight mb-1.5">
+                                            <span>${humanizeDateTime(created_at)}</span>
+                                        </div>
+                                        <div class="flex items-center justify-end">
+                                            <div class="h-14 w-14">
+                                                <a href="${qr_code}" target="_blank"><img src="${qr_code}" alt="${title}" class="w-full"></a>
+                                            </div>
+                                            <div class="text-sm font-roboto font-extralight ml-2">
+                                                <div class="font-semibold">${title}</div>  
+                                                <div class="text-xs font-light my-0.5">Type: ${type}</div>  
+                                                <div class="text-xs font-light">Source: ${source}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>`
+                        }
+                    } else if (data == null && message == "no records") {
+                        content = `<p class="font-roboto font-light">No QR Codes created till now</p>`;
+                    }
+                    $("#qr-box-container").html(content);
+                }
+            });
+        }
+
+        loadCreatedQRs();
+
+        //handels creation of new QR
+        $("#create-qr-submit").click(function (e) {
+            e.preventDefault();
+            let type = $("#type").val();
+            if(type == "wifi"){
+                ajax_data = {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    title: $("#title").val(),
+                    type: type,
+
+                    ssid: $("#ssid").val(),
+                    security: $("#security").val(),
+                    password: $("#password").val(),
+                }
+            }else if(type == "me-card"){
+                ajax_data = {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    title: $("#title").val(),
+                    type: type,
+
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                }
+            }else{
+                ajax_data = {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    title: $("#title").val(),
+                    type: type,
+
+                    url: $("#url").val(),
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'create-qr-ajax' %}",
+                data: ajax_data,
+                success: function (response) {
+                    console.log(response);
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+
+                    if (error == null && message == "QR created successfully") {
+                        $("#message-box").css("display", "none");
+                        $("#modal-container").css("display", "block");
+                        $("#qr-modal-link").attr("href", data["qr_code"]);
+                        $("#qr-modal-img").attr("src", data["qr_code"]);
+                        $("#modal-qr-download").attr("href", data["qr_code"]);
+
+                        let message_block = `
+                        <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message}</span>
+                            </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
+
+                    } else {
+                        let message_block = `
+                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${error}</span>
+                        </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
+                    }
+
+                    loadCreatedQRs();
+
+                }
+            });
+
+        });
+
+
+        //handels deletion of QRs
+        $(document).on("click", ".delete-qr-btn", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "{% url 'delete-qr-ajax' %}",
+                data: {
+                    id: $(this).data("id"),
+                },
+                success: function (response) {
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+                    loadCreatedQRs();
+                    // if (error == null && message == "deleted successfully") {
+                    // }else{
+                    //     // alert(message+" Reload page to see changes");
+                    //     alert(error);
+                    // }
+
+
+                }
+            });
+
+        });
+
+
+        $("#modal-close").click(function (e) {
+            e.preventDefault();
+            $("#modal-container").css("display", "none");
+        });
+
+        $("#modal-link-copy").click(function (e) {
+            e.preventDefault();
+            var link = $(this).data("id");
+            copyToClipboard(link);
+
+            $("#modal-link-copy").html('Copied')
+        });
+
+
+    });
+
+</script>
+
+{% endblock js %}
