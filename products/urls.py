@@ -6,6 +6,7 @@ urlpatterns = [
     path("url-shorter", url_shorter, name="url_shorter"),
     
     #ajax request urls
+    path("get-short-url-ajax", get_short_url_ajax, name="get-short-url-ajax"),
     path("create-short-url-ajax", create_short_url_ajax, name="create-short-url-ajax"),
     path("delete-short-url-ajax", delete_short_url_ajax, name="delete-short-url-ajax"),
 ]

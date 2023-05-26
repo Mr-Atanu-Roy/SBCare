@@ -40,41 +40,6 @@
     <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
         <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created URLS</h1>
         <div class="w-full" id="url-box-container">
-            {% if created_urls %}
-            {% for url in created_urls %}
-            <div class="url-box w-full flex-col justify-start items-center">
-                <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
-
-                    <div class="flex-col items-center justify-between mr-6">
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="p-0.5 delete-url-btn" data-id="{{url.id}}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
-                        </form>
-                    </div>
-                    <div>
-                        <div class="text-xs font-roboto font-extralight mb-1.5">
-                            <span>{% if url.title %} <span class="font-semibold">{{url.title|title}}</span> -{%endif%}
-                                {{url.created_at | naturalday}}</span>
-                        </div>
-                        <div class="text-sm font-roboto font-extralight mb-1.5">
-                            <a href="{{ url.original_url }}" target="_blank" class="hover:underline">
-                                {{url.original_url|slice:"38"}} {% if url.original_url|length > 38 %}...{% endif %}</a>
-                        </div>
-                        <div class="text-sm font-roboto font-extralight mb-1">
-                            <a href="{{url.short_url}}" target="_blank"
-                                class="text-indigo-600 hover:underline">{{url.short_url}}</a>
-                        </div>
-                        <div class="text-sm font-roboto font-extralight">
-                            <span class="text-xs font-light">Source: {% if url.source == 'api-service' %} API Service {% else %} SB Care Product {% endif %}</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-                <p class="font-roboto font-light">No URLs created till now</p>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -132,6 +97,82 @@
             tempInput.remove(); // Remove the temporary input element
         }
 
+        //func to humanize dates
+        function humanizeDateTime(dateTimeString) {
+            const currentDate = new Date();
+            const date = new Date(dateTimeString);
+
+            const timeDiff = currentDate.getTime() - date.getTime();
+            const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Number of days difference
+
+            if (dayDiff === 0) {
+                return "today";
+            } else if (dayDiff === 1) {
+                return "yesterday";
+            } else {
+                return dayDiff + " days ago";
+            }
+        }
+
+
+        //func to load created urls
+        function loadCreatedURLS() {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'get-short-url-ajax' %}",
+                success: function (response) {
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+
+                    let content = ``;
+                    if (data != null && message == "data fetched successfully") {
+                        for (let index = data.length - 1; index >= 0; index--) {
+                            let id = data[index]["id"];
+                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].slice(0, 15) + "....  ";
+                            let original_url = data[index]["original_url"];
+                            let short_url = data[index]["short_url"];
+                            let source = data[index]["source"] == "sbcare-product" ? "SB Care Product" : "API Service";
+                            let created_at = data[index]["created_at"];
+                        
+                            content += `
+                            <div class="url-box w-full flex-col justify-start items-center">
+                                <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
+
+                                    <div class="flex-col items-center justify-between mr-6">
+                                        <button type="submit" class="p-0.5 delete-url-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-roboto font-extralight mb-1.5">
+                                            <span><span class="font-semibold">${title}</span>${humanizeDateTime(created_at)}</span>
+                                        </div>
+                                        <div class="text-sm font-roboto font-extralight mb-1.5">
+                                            <a href="${original_url}" target="_blank" class="hover:underline">
+                                                ${original_url.length > 35 ? original_url.slice(0, 35) + "......" : original_url}</a>
+                                        </div>
+                                        <div class="text-sm font-roboto font-extralight mb-1">
+                                            <a href="${short_url}" target="_blank"
+                                                class="text-indigo-600 hover:underline">${short_url}</a>
+                                        </div>
+                                        <div class="text-sm font-roboto font-extralight">
+                                            <span class="text-xs font-light">Source: ${source}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>`
+                        }
+                    } else if (data == null && message == "no records") {
+                        content = `<p class="font-roboto font-light">No URLs created till now</p>`;
+                    }
+                    $("#url-box-container").html(content);
+                }
+            });
+        }
+
+        loadCreatedURLS();
+
         //handels creation of new URL
         $("#create-url-submit").click(function (e) {
             e.preventDefault();
@@ -149,7 +190,7 @@
                     let error = response.error;
                     let status = response.status;
 
-                    if (error == null) {
+                    if (error == null && message == "URL created successfully") {
                         $("#message-box").css("display", "none");
                         $("#modal-container").css("display", "block");
                         $("#modal-link").html(data);
@@ -159,7 +200,7 @@
                         let message_block = `
                         <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
-                            <span class="block sm:inline">${message}. Reload page to see them</span>
+                            <span class="block sm:inline">${message}</span>
                             </div>`;
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
@@ -174,29 +215,33 @@
                         $("#message-box").html(message_block);
                     }
 
+                    loadCreatedURLS();
 
                 }
             });
 
         });
 
-        //handels deletion of new URL
+        //handels deletion of URL
         $(document).on("click", ".delete-url-btn", function (e) {
             e.preventDefault();
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "{% url 'delete-short-url-ajax' %}",
                 data: {
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                     id: $(this).data("id"),
                 },
                 success: function (response) {
                     let message = response.message;
                     let error = response.error;
-                    if (error != null) {
-                        // alert(message+" Reload page to see changes");
-                        alert(error);
-                    }
+                    let status = response.status;
+                    loadCreatedURLS();
+                    // if (error == null && message == "deleted successfully") {
+                    // }else{
+                    //     // alert(message+" Reload page to see changes");
+                    //     alert(error);
+                    // }
+
 
                 }
             });
