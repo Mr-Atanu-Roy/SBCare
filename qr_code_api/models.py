@@ -1,13 +1,12 @@
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.conf import settings
+from django.core.files.base import ContentFile
 
 from accounts.models import User, BaseModel
 from url_short_api.models import source_choices
 
+from io import BytesIO
 import random
-import segno
+import qrcode
 
 type_choices = (
     ("url", "url"),
@@ -21,7 +20,7 @@ class QRCode(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
     type = models.CharField(choices=type_choices, default="url", max_length=300)
-    qr_code = models.FileField(max_length=650, upload_to="qr-codes/", blank=True, null=True)
+    qr_code = models.ImageField(upload_to="qr-codes/", blank=True, null=True)
     source = models.CharField(choices=source_choices, max_length=255, default="api-service")
     
     #qr-code data fields
@@ -36,37 +35,40 @@ class QRCode(BaseModel):
     password = models.CharField(blank=True, null=True, max_length=350)
     security = models.CharField(blank=True, null=True, max_length=350)
     
+    
+    def save(self, *args, **kwargs):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        
+        type = self.type
+        if type == "url":
+            qr_data = self.url
+        elif type == "wifi":
+            qr_data = f"WIFI:T:{self.security};S:{self.ssid};P:{self.password};;"
+        elif type == "me-card":
+            qr_data = f"BEGIN:VCARD\nVERSION:3.0\nN:{self.name}\nTEL;TYPE=CELL:{self.phone}\nEMAIL:{self.email}"
+            if self.url:
+                qr_data += f"\nURL:{self.url}"
+            qr_data += "\nEND:VCARD"
+        
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+        qr_code_image = qr.make_image(fill_color="black", back_color="white")
+
+        buffer = BytesIO()
+        qr_code_image.save(buffer, format="PNG")
+        self.qr_code.save(f'qrcode_{self.type}_{random.randint(1000, 999999)}.png', ContentFile(buffer.getvalue()), save=False)
+
+        super().save(*args, **kwargs)
         
     def __str__(self):
         return self.title
     
-    
-
-
-
-#signals
-@receiver(post_save, sender=QRCode)
-def create_qrcode_handler(sender, instance, created, *args, **kwargs):
-    '''
-    This signal will be executed each time a new extry is inserted in QRCode db. This signal is responsible for generating qrcodes
-    '''
-    
-    if created:
-        type = instance.type
-    
-        if type=="url":
-            qrcode = segno.make(instance.url)
-        
-        if type=="me-card":
-            qrcode = segno.helpers.make_mecard(name=instance.name, email=instance.email, phone=instance.phone)
-        
-        if type=="wifi":
-            qrcode = segno.helpers.make_wifi(ssid=instance.ssid, password=instance.password, security=instance.security)
-            
-        qr_dir = f'{settings.MEDIA_ROOT}\qrcode_{instance.type}_{random.randint(1000, 999999)}.png'
-        instance.qr_code = qr_dir
-
-        qrcode.save(qr_dir, scale=10)
-
+    class Meta:
+        verbose_name_plural = "QR Code API"
     
     

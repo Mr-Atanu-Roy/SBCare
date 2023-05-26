@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
-from django.conf import settings
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import QRCode
 from .serializers import QRCodeSerializer
+
 
 # Create your views here.
 class GetCreateQR(APIView):
@@ -62,6 +62,44 @@ class GetCreateQR(APIView):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
     
     
+class GetDeleteQR(APIView):
+    '''This api will delete qr-codes'''
     
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
+    def get_object(self, pk, user):
+        try:
+            return QRCode.objects.get(pk=pk, user=user)
+        except QRCode.DoesNotExist:
+            raise Http404
+        except Exception as e:
+            print(e)
+            
+    
+    def get(self, request, pk, format=None):
+        qr_code = self.get_object(pk, request.user)
+
+        qr_code_serializer = QRCodeSerializer(qr_code)
+        
+        response = {
+                "status": status.HTTP_200_OK,
+                "data": qr_code_serializer.data,
+                "message": "data fetched successfully"
+        }
+        return Response(response, status=status.HTTP_200_OK)
+
+
+    def delete(self, request, pk, format=None):
+        qr_code = self.get_object(pk, request.user)
+        qr_code.delete()
+        
+        response = {
+                "status": status.HTTP_204_NO_CONTENT,
+                "data": None,
+                "message": "deleted successfully"
+        }
+        return Response(response, status=status.HTTP_204_NO_CONTENT)
     
     

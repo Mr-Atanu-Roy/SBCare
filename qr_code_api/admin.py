@@ -4,7 +4,7 @@ from .models import QRCode
 
 # Register your models here.
 class QRCodeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'type', 'source', 'created_at')
+    list_display = ('id', 'user', 'title', 'type', 'source', 'created_at')
     fieldsets = [
         ("QR Details", {
             "fields": (
