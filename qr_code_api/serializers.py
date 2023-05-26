@@ -9,6 +9,7 @@ class QRCodeSerializer(serializers.ModelSerializer):
         model = QRCode
         exclude = ['id', 'user', 'created_at', 'updated_at', 'source']
         extra_kwargs = {
+            'id': {'read_only': True},
             'qr_code': {'read_only': True}
         }
         
