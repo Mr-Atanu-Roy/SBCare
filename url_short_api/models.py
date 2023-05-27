@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
-from accounts.models import BaseModel, User
+from accounts.models import BaseModel, SoftModel, User
 from .utils import generate_random_string
 
 
@@ -26,7 +26,7 @@ def generate_unique_short_url():
 
 
 # Create your models here.
-class ShortURL(BaseModel):
+class ShortURL(BaseModel, SoftModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
     title = models.CharField(max_length=300, blank=True, null=True)
     original_url = models.URLField()

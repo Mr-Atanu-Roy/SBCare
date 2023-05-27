@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .manager import Usermanager
+from .manager import Usermanager, NonDelete
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -26,6 +26,25 @@ class BaseModel(models.Model):
     
     class Meta:
         abstract = True
+        
+        
+class SoftModel(models.Model):
+    is_deleted = models.BooleanField(default=False)
+    
+    everything = models.Manager()
+    objects = NonDelete()
+
+    def delete(self):
+        self.is_deleted = True
+        self.save()
+        
+    def restore(self):
+        self.is_deleted = False
+        self.save()
+        
+    class Meta:
+        abstract = True
+
 
 
 class User(AbstractUser):

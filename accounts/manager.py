@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
-
+from django.db import models
+from django.db.models.query import QuerySet
 
 #custom manager
 class Usermanager(BaseUserManager):
@@ -34,4 +35,11 @@ class Usermanager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(email, password, **extra_fields)
+        
+        
+class NonDelete(models.Manager):
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted = False)
+        
         

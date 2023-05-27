@@ -787,6 +787,10 @@ video {
   height: 3.5rem;
 }
 
+.h-16{
+  height: 4rem;
+}
+
 .h-20{
   height: 5rem;
 }
@@ -811,10 +815,6 @@ video {
   height: 100vh;
 }
 
-.h-16{
-  height: 4rem;
-}
-
 .min-h-full{
   min-height: 100%;
 }
@@ -829,6 +829,10 @@ video {
 
 .w-14{
   width: 3.5rem;
+}
+
+.w-16{
+  width: 4rem;
 }
 
 .w-2\/5{
@@ -857,10 +861,6 @@ video {
 
 .w-full{
   width: 100%;
-}
-
-.w-16{
-  width: 4rem;
 }
 
 .flex-shrink-0{
@@ -1199,11 +1199,6 @@ video {
 .py-7{
   padding-top: 1.75rem;
   padding-bottom: 1.75rem;
-}
-
-.px-2\.5{
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
 }
 
 .pb-1{

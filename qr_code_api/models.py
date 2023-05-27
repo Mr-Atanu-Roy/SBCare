@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.files.base import ContentFile
 
-from accounts.models import User, BaseModel
+from accounts.models import User, BaseModel, SoftModel
 from url_short_api.models import source_choices
 
 from io import BytesIO
@@ -15,7 +15,7 @@ type_choices = (
 )
 
 # Create your models here.
-class QRCode(BaseModel):
+class QRCode(BaseModel, SoftModel):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
