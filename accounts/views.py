@@ -151,19 +151,6 @@ def profile(request):
     return render(request, 'accounts/profile.html', context)
 
 
-@login_required(login_url="/auth/login")
-def activity(request):
-    context = {
-        "current_date": current_time,
-    }
-    try:
-        user_profile = UserProfile.objects.filter(user=request.user).first()
-        context["user_profile"] = user_profile
-    except Exception as e:
-        print(e)
-        pass
-    return render(request, 'accounts/activity.html', context)
-
 
 def email_verify(request):
     email = ""
