@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
 
 from django.utils import timezone
 from datetime import timedelta
@@ -150,6 +151,20 @@ def profile(request):
     return render(request, 'accounts/profile.html', context)
 
 
+@login_required(login_url="/auth/login")
+def activity(request):
+    context = {
+        "current_date": current_time,
+    }
+    try:
+        user_profile = UserProfile.objects.filter(user=request.user).first()
+        context["user_profile"] = user_profile
+    except Exception as e:
+        print(e)
+        pass
+    return render(request, 'accounts/activity.html', context)
+
+
 def email_verify(request):
     email = ""
     try:
@@ -294,3 +309,60 @@ def reset_password_link(request, token):
     context["cpassword"] = cpassword
     
     return render(request, './accounts/reset_password_link.html', context)
+
+
+
+
+#ajax calls
+
+@login_required(login_url="/auth/login")
+def submit_profile_form(request):
+    try:
+        
+        if request.method == "POST":
+            print(request.POST)
+            user = User.objects.filter(email=request.user).first()
+            user_profile = UserProfile.objects.filter(user=request.user).first()
+            if user and user_profile:
+                try: 
+                    # updating user model
+                    user.first_name = request.POST.get("fname")
+                    user.last_name = request.POST.get("lname")
+                    user.save()
+                    
+                    #updating profile model
+                    user_profile.gender = request.POST.get("gender")
+                    user_profile.country = request.POST.get("country")
+                    user_profile.city = request.POST.get("city")
+                    if request.POST.get("dob"):
+                        user_profile.dob = request.POST.get("dob") 
+                    user_profile.address1 = request.POST.get("address1")
+                    user_profile.address2 = request.POST.get("address2")
+                    user_profile.save()
+                    
+                except Exception as e:
+                    pass
+            
+                response = {
+                    "error": None,
+                    "status": 201,
+                    "message": "Profile Updated"
+                }
+            else:
+                response = {
+                    "error": "Invalid user",
+                    "status": 404,
+                    "message": "Could not updated profile"
+                }
+        else:
+            response = {
+                "error": "Invalid request",
+                "status": 404,
+                "message": "Could not updated profile"
+            }
+        
+        return JsonResponse(response)
+        
+    except Exception as e:
+        pass
+

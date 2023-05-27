@@ -40,6 +40,15 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'activity' %}"
+                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 {%if request.path == '/auth/dashboard/user-activity/'%}border-indigo-500 bg-gray-50 text-gray-800{%endif%}">
+                    <span class="inline-flex justify-center items-center ml-4">
+                        <i class="fa fa-hourglass-half transform rotate-2"></i>
+                    </span>
+                    <span class="ml-2 text-sm tracking-wide truncate font-roboto font-medium">Activity</span>
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'logout' %}"
                     class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6">
                     <span class="inline-flex justify-center items-center ml-4">
@@ -60,7 +69,7 @@
             </li>
             <li>
                 <a href="{% url 'url_shorter' %}"
-                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6">
+                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 {%if request.path == '/products/url-shorter'%}border-indigo-500 bg-gray-50 text-gray-800{%endif%}">
                     <span class="inline-flex justify-center items-center ml-4">
                         <i class="fa fa-link"></i>
                     </span>
@@ -69,20 +78,11 @@
             </li>
             <li>
                 <a href="{% url 'qrcode' %}"
-                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6">
+                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 {%if request.path == '/products/qrcode'%}border-indigo-500 bg-gray-50 text-gray-800{%endif%}">
                     <span class="inline-flex justify-center items-center ml-4">
                         <i class="fa fa-qrcode"></i>
                     </span>
                     <span class="ml-2 text-sm tracking-wide truncate font-roboto font-medium">QR Generator</span>
-                </a>
-            </li>
-            <li>
-                <a href="#"
-                    class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6">
-                    <span class="inline-flex justify-center items-center ml-4">
-                        <i class="fa fa-envelope"></i>
-                    </span>
-                    <span class="ml-2 text-sm tracking-wide truncate font-roboto font-medium">Bulk Email</span>
                 </a>
             </li>
         </ul>

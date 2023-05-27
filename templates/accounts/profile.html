@@ -78,6 +78,7 @@
         </div>
         <div>
             <form action="" method="POST">
+                <div id="profileFormMessage" class="hidden"></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {% csrf_token %}
                     <div>
@@ -119,12 +120,22 @@
                             class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">House number, Street Name</label>
+                        <input type="text" id="address1" value="{% if user_profile.address1 %}{{user_profile.address1}}{% endif %}"
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                    </div>
+                    <div>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Colony, Postal Code</label>
+                        <input type="text" id="address2" value="{% if user_profile.address2 %}{{user_profile.address2}}{% endif %}"
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                    </div>
                 </div>
                 <div class="flex items-center justify-center my-8">
-                    <button type="submit" name="create-url-submit" id="create-url-submit" class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full sm:w-9/12 lg:w-8/12 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                    <button type="submit" name="profileFormSubmit" id="profileFormSubmit" class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full sm:w-9/12 lg:w-8/12 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
                         <span class="inline-block">Make Changes
-                            <i class="fa fa-arrow-right-long ml-2.5"></i>
+                            <i class="fa fa-arrow-right-long ml-2.5 hover:ml-4 transition-all duration-300 ease-in-out"></i>
                         </span>
                     </button>
                 </div>
@@ -136,3 +147,64 @@
 {% include '../blocks/dismissible_alert.html' %}
 
 {% endblock body %}
+
+{% block js %}
+
+<script>
+
+    $(document).ready(function () {
+
+        //handles submission of profile form
+        $("#profileFormSubmit").click(function (e) { 
+            e.preventDefault();
+        
+            $.ajax({
+                type: "POST",
+                url: "{%url 'submit-profile-form'%}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    fname: $('#fname').val(),
+                    lname: $('#lname').val(),
+                    dob: $('#dob').val(),
+                    gender: $('#gender').val(),
+                    city: $('#city').val(),
+                    country: $('#country').val(),
+                    address1: $('#address1').val(),
+                    address2: $('#address2').val(),
+                },
+                success: function (response) {
+                    error = response.error;
+                    status = response.status;
+                    message = response.message;
+
+                    let content = ``;
+                    if(status==201 && error==null){
+                        content = `
+                        <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message}</span>
+                        </div>
+                        `;
+                    }else{
+                        content = `
+                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message}</span>
+                        </div>`;
+                        
+                    }
+                    $("#profileFormMessage").css("display", "block");
+                    $("#profileFormMessage").html(content);
+                    setTimeout(function() {
+                        $("#profileFormMessage").css("display", "none");
+                    }, 3100);
+                }
+            });
+        });
+
+
+    });
+
+</script>
+
+{% endblock js %}

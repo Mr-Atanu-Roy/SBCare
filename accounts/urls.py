@@ -11,6 +11,7 @@ urlpatterns = [
     path("logout/", logout, name="logout"),
     
     path("dashboard/profile/", profile, name="profile"),
+    path("dashboard/activity/", activity, name="activity"),
     
     path("email-verify/", email_verify, name="email_verify"),
     path("email-verify/<token>", email_verify_link, name="email_verify_link"),
@@ -19,4 +20,8 @@ urlpatterns = [
     path("reset-password/<token>", reset_password_link, name="reset_password_link"),
     
     path("generate-authtoken", obtain_auth_token, name="generate_authtoken"),
+    
+    #ajax urls
+    path("submit-profile-form/", submit_profile_form, name="submit-profile-form"),
+
 ]
