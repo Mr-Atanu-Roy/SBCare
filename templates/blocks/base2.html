@@ -23,11 +23,11 @@
 </head>
 
 <body>
-    <section id="profile" class="min-h-screen w-full flex justify-between">
+    <section id="profile" class="min-h-screen w-full flex justify-between mt-7 lg:mt-0">
 
     {% include './side_nav.html' %}
 
-    <div class="w-full min-h-screen ml-56">
+    <div class="w-full min-h-screen lg:ml-56">
 
     {% block body %}
 
@@ -40,9 +40,21 @@
 
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        let openNav=document.getElementById("side-nav-open");
+        let closeNav=document.getElementById("side-nav-close");
+        let sideNav=document.getElementById("side-nav");
+
+        openNav.addEventListener('click', function() {
+            sideNav.classList.remove('-left-full');
+        });
+        closeNav.addEventListener('click', function() {
+            sideNav.classList.add('-left-full');
+        });
+    </script>
     {% block js %}
-    
+
     {% endblock js %}
 </body>
 

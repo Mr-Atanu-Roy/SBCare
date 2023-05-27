@@ -6,7 +6,7 @@
 
 <div class="h-full w-full p-6 md:p-8 lg:px-12">
     <div class="flex items-start justify-evenly flex-wrap">
-        <div class="p-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
+        <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
             <div class="font-bold text-3xl">
                 {{user_profile.coins}}
             </div>
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
+        <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
             <div class="font-bold text-3xl">
                 Free
             </div>
@@ -79,28 +79,28 @@
         <div>
             <form action="" method="POST">
                 <div id="profileFormMessage" class="hidden"></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 gap-5 font-roboto md:grid-cols-2 lg:grid-cols-3">
                     {% csrf_token %}
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">First Name</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">First Name</label>
                         <input type="text" id="fname" value="{{user.first_name}}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Last Name</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Last Name</label>
                         <input type="text" id="lname" value="{{user.last_name}}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Date of Birth</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Date of Birth</label>
                         <input type="date" id="dob" value="{% if user_profile.dob %}{{user_profile.dob|date:'Y-m-d'}}{% endif %}"
                             min="1940-01-01" max="{{current_date|date:'Y-m-d'}}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Gender</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Gender</label>
                         <select id="gender"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light">
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light">
                             <option value="male" {% if user_profile.gender == "male" %}selected{% endif %}>Male</option>
                             <option value="female" {% if user_profile.gender == "female" %}selected{% endif %}>Female
                             </option>
@@ -109,27 +109,27 @@
                         </select>
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Country</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Country</label>
                         <input type="text" id="country"
                             value="{% if user_profile.country %}{{user_profile.country}}{% endif %}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">City</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">City</label>
                         <input type="text" id="city" value="{% if user_profile.city %}{{user_profile.city}}{% endif %}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 gap-5 mt-5 font-roboto lg:grid-cols-2">
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">House number, Street Name</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">House number, Street Name</label>
                         <input type="text" id="address1" value="{% if user_profile.address1 %}{{user_profile.address1}}{% endif %}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                     <div>
-                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Colony, Postal Code</label>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Colony, Postal Code</label>
                         <input type="text" id="address2" value="{% if user_profile.address2 %}{{user_profile.address2}}{% endif %}"
-                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light" />
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light" />
                     </div>
                 </div>
                 <div class="flex items-center justify-center my-8">

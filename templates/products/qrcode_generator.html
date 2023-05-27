@@ -6,12 +6,12 @@
 
 {% block body %}
 
-<div class="h-screen grid grid-cols-5 gap-4 sm:py-6">
-    <div class="p-10 xs:p-0 mx-auto w-full col-span-3 flex items-center justify-center overflow-y-auto">
+<div class="h-screen py-6 md:grid md:grid-cols-5 md:gap-4">
+    <div class="p-6 mx-auto w-full col-span-3 flex items-center justify-center overflow-y-auto md:pr-2 lg:p-10">
         <div class="w-full">
-            <h2 class="font-bold text-center text-2xl mb-5 font-roboto capitalize">Create a new QR</h2>
+            <h2 class="font-bold text-center text-2xl sm:mb-5 font-roboto capitalize">Create a new QR</h2>
             <div class="w-full divide-y divide-gray-200">
-                <form method="post" action="" class="px-5 py-7">
+                <form method="post" action="" class="sm:px-5 py-7">
                     {% csrf_token %}
 
                     <div id="message-box" class="hidden mb-6"></div>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-center mt-10">
+                    <div class="flex items-center justify-center mt-3 sm:mt-8 md:mt-10">
                         <button type="submit" name="create-qr-submit" id="create-qr-submit"
                             class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full sm:w-3/4 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
                             <span class="inline-block">Generate QR Code
@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="p-10 pl-0 xs:p-0 mx-auto w-full col-span-2 overflow-y-auto">
+    <div class="p-6 mx-auto w-full col-span-2 overflow-y-auto">
         <h1 class="font-bold text-left text-2xl mb-5 font-roboto capitalize">Created QRs</h1>
         <div class="w-full" id="qr-box-container">
         </div>

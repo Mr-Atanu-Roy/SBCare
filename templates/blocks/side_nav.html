@@ -1,8 +1,11 @@
-<div class="h-screen overflow-x-auto fixed flex flex-col top-0 left-0 w-56 bg-white border-r">
-    <div class="flex items-start justify-start h-12 mt-1.5 ml-3.5">
+<div class="h-screen overflow-x-auto fixed flex flex-col top-0 -left-full w-full bg-white border-r transition-all ease-in-out duration-300 z-50 p-10 sm:p-12 md:p-8 lg:p-2 sm:w-10/12 md:w-8/12 lg:left-0 lg:w-56" id="side-nav">
+    <div class="flex items-start justify-between h-12 mt-1.5 ml-3.5">
         <div class="transform -rotate-6 flex-col items-start justify-start">
             <a href="{% url 'home' %}" class="text-4xl font-pacifico text-indigo-600">sb care</a>
             <div class="w-3/4 h-1 bg-indigo-700 rounded-md"></div>
+        </div>
+        <div class="text-3xl mt-3 mr-4 cursor-pointer lg:hidden" id="side-nav-close">
+            <i class="fa fa-times"></i>
         </div>
     </div>
     <div class="overflow-y-auto overflow-x-hidden flex-grow">
@@ -78,4 +81,8 @@
             </li>
         </ul>
     </div>
+</div>
+
+<div id="side-nav-open" class="fixed top-0 left-0 text-3xl cursor-pointer w-full bg-white m-0 p-0 lg:hidden">	
+    <i class="fa fa-bars m-4"></i>
 </div>
