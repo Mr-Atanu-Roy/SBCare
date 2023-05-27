@@ -14,7 +14,7 @@ from .utils import SendEmail
 gender_choices = (
     ("male", "Male"),
     ("female", "Female"),
-    ("not-specify", "not-specify")
+    ("none", "Rather Not Say")
 )
 
 
@@ -69,9 +69,10 @@ class User(AbstractUser):
     
 class UserProfile(BaseModel):
     user = models.OneToOneField(User, on_delete = models.CASCADE, related_name='profile')
+    dob = models.DateField(blank=True, null=True)
+    gender = models.CharField(choices=gender_choices, max_length=50, default="male")
     country = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.CharField(choices=gender_choices, max_length=50, default="male")
     address1 = models.TextField(blank=True, null=True)
     address2 = models.TextField(blank=True, null=True)
     

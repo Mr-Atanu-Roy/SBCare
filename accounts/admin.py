@@ -12,21 +12,26 @@ from qr_code_api.models import QRCode
 class OTPInline(admin.StackedInline):
     model = OTP
     extra = 0
+    classes = ['collapse']
     
 class TokenInline(admin.StackedInline):
     model = Token
     extra = 0
+    classes = ['collapse']
     
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
+    classes = ['collapse']
     
 class ShortURLInline(admin.TabularInline):
     model = ShortURL
     extra = 0
+    classes = ['collapse']
     
 class QRCodeInline(admin.TabularInline):
     model = QRCode
     extra = 0
+    classes = ['collapse']
 
     
 class UserAdmin(admin.ModelAdmin):
@@ -45,18 +50,18 @@ class UserAdmin(admin.ModelAdmin):
         ("Permissions", {
             "fields": (
                 ['is_staff', 'is_superuser', 'is_active', 'user_permissions', 'groups']
-            ),
+            ), 'classes': ['collapse']
         }),
     ]
     
-    inlines = [OTPInline, UserProfileInline, TokenInline, ShortURLInline, QRCodeInline]
+    inlines = [UserProfileInline, OTPInline, TokenInline, ShortURLInline, QRCodeInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
     fieldsets = [
         ("User Details", {
             "fields": (
-                ['api_access', 'coins', 'gender']
+                ['api_access', 'coins', 'gender', 'dob']
             ),
         }),
         ("Residentialgol Details", {

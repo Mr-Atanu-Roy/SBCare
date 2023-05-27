@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import User, OTP
+from .models import User, OTP, UserProfile
 from .utils import current_time, check_str_special
 
 # Create your views here.
@@ -138,8 +138,16 @@ def logout(request):
 
 @login_required(login_url="/auth/login")
 def profile(request):
-    # context = {}
-    return render(request, 'accounts/profile.html')
+    context = {
+        "current_date": current_time,
+    }
+    try:
+        user_profile = UserProfile.objects.filter(user=request.user).first()
+        context["user_profile"] = user_profile
+    except Exception as e:
+        print(e)
+        pass
+    return render(request, 'accounts/profile.html', context)
 
 
 def email_verify(request):
@@ -217,8 +225,8 @@ def reset_password(request):
     context = {}
     try:
         if request.user.is_authenticated:
-            messages.warning(request, "You are already logged in")
-            return redirect('home')
+            messages.warning(request, "You are already logged in. Logout to reset password")
+            return redirect('profile')
         
         if request.method=="POST":
             email = request.POST.get("email")
