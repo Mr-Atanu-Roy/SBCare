@@ -129,8 +129,7 @@
                     if (data != null && message == "data fetched successfully") {
                         for (let index = data.length - 1; index >= 0; index--) {
                             let id = data[index]["id"];
-                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].length > 15 ? data[index]["title"].slice(0, 15) + "....  " : data[index]["title"]+"  ";
-                            let original_url = data[index]["original_url"];
+                            let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].length > 26 ? data[index]["title"].slice(0, 26) + "....  " : data[index]["title"]+"  ";
                             let short_url = data[index]["short_url"];
                             let source = data[index]["source"] == "sbcare-product" ? "SB Care Product" : "API Service";
                             let created_at = data[index]["created_at"];
@@ -144,11 +143,10 @@
                                     </div>
                                     <div>
                                         <div class="text-xs font-roboto font-extralight mb-1.5">
-                                            <span><span class="font-semibold">${title}</span>${humanizeDateTime(created_at)}</span>
+                                            ${humanizeDateTime(created_at)}
                                         </div>
-                                        <div class="text-sm font-roboto font-extralight mb-1.5">
-                                            <a href="${original_url}" target="_blank" class="hover:underline">
-                                                ${original_url.length > 35 ? original_url.slice(0, 35) + "......" : original_url}</a>
+                                        <div class="text-xs font-roboto font-semibold mb-1.5">
+                                            ${title}
                                         </div>
                                         <div class="text-sm font-roboto font-extralight mb-1">
                                             <a href="${short_url}" target="_blank"
