@@ -3,8 +3,14 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
-from accounts.models import BaseModel, User
+from accounts.models import BaseModel, SoftModel, User
 from .utils import generate_random_string
+
+
+source_choices = (
+    ("api-service", "API Service"),
+    ("sbcare-product", "SB Care Product"),
+)
 
 #utility func
 def generate_unique_short_url():
@@ -20,13 +26,18 @@ def generate_unique_short_url():
 
 
 # Create your models here.
-class ShortURL(BaseModel):
+class ShortURL(BaseModel, SoftModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    title = models.CharField(max_length=300, blank=True, null=True)
     original_url = models.URLField()
     short_url = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    source = models.CharField(choices=source_choices, max_length=255, default="api-service")
     
     def __str__(self):
         return str(self.short_url)
+    
+    class Meta:
+        verbose_name_plural = "URL Shorter API"
     
     
     

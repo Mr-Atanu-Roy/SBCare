@@ -43,13 +43,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    "django.contrib.humanize",
+    
     #third-party
     'rest_framework',
     'rest_framework.authtoken',
     
     #own
     'accounts',
+    'products',
+    
     'url_short_api',
+    'qr_code_api',
 ]
 
 MIDDLEWARE = [
@@ -131,6 +136,10 @@ USE_TZ = True
 STATIC_URL = '/static/' 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+#Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 # Default primary key field type
