@@ -16,7 +16,7 @@ def signup(request):
         context = {}
         if request.user.is_authenticated:
             messages.warning(request, "You are already logged in")
-            return redirect('home')
+            return redirect('profile')
         
         else:
             try:
