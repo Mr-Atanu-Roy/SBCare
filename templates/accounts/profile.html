@@ -153,53 +153,97 @@
 <script>
 
     $(document).ready(function () {
+        let content = ``;
+
+        //storing old data
+        oldfname = $('#fname').val();
+        oldlname = $('#lname').val();
+        olddob = $('#dob').val();
+        oldgender = $('#gender').val();
+        oldcity = $('#city').val();
+        oldcountry = $('#country').val();
+        oldaddress1 = $('#address1').val();
+        oldaddress2 = $('#address2').val();
 
         //handles submission of profile form
         $("#profileFormSubmit").click(function (e) { 
             e.preventDefault();
-        
-            $.ajax({
-                type: "POST",
-                url: "{%url 'submit-profile-form'%}",
-                data: {
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                    fname: $('#fname').val(),
-                    lname: $('#lname').val(),
-                    dob: $('#dob').val(),
-                    gender: $('#gender').val(),
-                    city: $('#city').val(),
-                    country: $('#country').val(),
-                    address1: $('#address1').val(),
-                    address2: $('#address2').val(),
-                },
-                success: function (response) {
-                    error = response.error;
-                    status = response.status;
-                    message = response.message;
 
-                    let content = ``;
-                    if(status==201 && error==null){
-                        content = `
-                        <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
-                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
-                            <span class="block sm:inline">${message}</span>
-                        </div>
-                        `;
-                    }else{
-                        content = `
-                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
-                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
-                            <span class="block sm:inline">${message}</span>
-                        </div>`;
-                        
+            newfname = $('#fname').val();
+            newlname = $('#lname').val();
+            newdob = $('#dob').val();
+            newgender = $('#gender').val();
+            newcity = $('#city').val();
+            newcountry = $('#country').val();
+            newaddress1 = $('#address1').val();
+            newaddress2 = $('#address2').val();
+
+            if(oldfname == newfname && oldlname == newlname && olddob == newdob && oldgender == newgender && oldcity == newcity && oldcountry == newcountry && oldaddress1 == newaddress1 && oldaddress2 == newaddress2){
+                content = `
+                <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                    <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                    <span class="block sm:inline">No changes were made</span>
+                </div>`;
+                $("#profileFormMessage").css("display", "block");
+                $("#profileFormMessage").html(content);
+                setTimeout(function() {
+                    $("#profileFormMessage").css("display", "none");
+                }, 3100);
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "{%url 'submit-profile-form'%}",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        fname: $('#fname').val(),
+                        lname: $('#lname').val(),
+                        dob: $('#dob').val(),
+                        gender: $('#gender').val(),
+                        city: $('#city').val(),
+                        country: $('#country').val(),
+                        address1: $('#address1').val(),
+                        address2: $('#address2').val(),
+                    },
+                    success: function (response) {
+                        error = response.error;
+                        status = response.status;
+                        message = response.message;
+    
+                        if(status==201 && error==null){
+                            content = `
+                            <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">${message}</span>
+                            </div>
+                            `;
+                        }else{
+                            content = `
+                            <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">${message}</span>
+                            </div>`;
+                            
+                        }
+                        $("#profileFormMessage").css("display", "block");
+                        $("#profileFormMessage").html(content);
+                        setTimeout(function() {
+                            $("#profileFormMessage").css("display", "none");
+                        }, 3100);
+
+
+                        //storing old data
+                        oldfname = $('#fname').val();
+                        oldlname = $('#lname').val();
+                        olddob = $('#dob').val();
+                        oldgender = $('#gender').val();
+                        oldcity = $('#city').val();
+                        oldcountry = $('#country').val();
+                        oldaddress1 = $('#address1').val();
+                        oldaddress2 = $('#address2').val();
                     }
-                    $("#profileFormMessage").css("display", "block");
-                    $("#profileFormMessage").html(content);
-                    setTimeout(function() {
-                        $("#profileFormMessage").css("display", "none");
-                    }, 3100);
-                }
-            });
+                });
+            }
+        
         });
 
 

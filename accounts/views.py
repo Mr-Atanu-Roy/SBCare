@@ -307,7 +307,6 @@ def submit_profile_form(request):
     try:
         
         if request.method == "POST":
-            print(request.POST)
             user = User.objects.filter(email=request.user).first()
             user_profile = UserProfile.objects.filter(user=request.user).first()
             if user and user_profile:
