@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from .manager import Usermanager, NonDelete
 
@@ -110,13 +111,13 @@ class UserToken(BaseModel):
         return str(uuid.uuid4())
     
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if self.role == "app-use":
             # Check if a UserToken with role="app-use" already exists for the user
             existing_app_use_token = UserToken.objects.filter(user=self.user, role="app-use").first()
             if existing_app_use_token:
-                # Only allow one UserToken with role="app-use" per user
-                raise ValueError("A UserToken with role='app-use' already exists for this user")
+                raise ValidationError("A UserToken with role='app-use' already exists for this user")
             
+        if not self.pk:
             self.token = self.generate_token()
             
         return super().save(*args, **kwargs)
