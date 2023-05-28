@@ -152,6 +152,13 @@ def profile(request):
 
 
 
+@login_required(login_url="/auth/login")
+def dev_settings(request):
+    
+
+    return render(request, './accounts/dev_settings.html')
+
+
 def email_verify(request):
     email = ""
     try:
