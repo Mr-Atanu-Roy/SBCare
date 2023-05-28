@@ -1,8 +1,7 @@
 from django.urls import path
 
-from rest_framework.authtoken.views import obtain_auth_token
-
 from .views import *
+from .api_view import GetCreateAuthToken
 
 urlpatterns = [
     path("signup/", signup, name="signup"),
@@ -19,7 +18,7 @@ urlpatterns = [
     path("reset-password/", reset_password, name="reset_password"),
     path("reset-password/<token>", reset_password_link, name="reset_password_link"),
     
-    path("generate-authtoken", obtain_auth_token, name="generate_authtoken"),
+    path("generate-authtoken/", GetCreateAuthToken.as_view(), name="generate_authtoken"),
     
     #ajax urls
     path("submit-profile-form/", submit_profile_form, name="submit-profile-form"),

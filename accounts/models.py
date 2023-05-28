@@ -5,7 +5,6 @@ from .manager import Usermanager, NonDelete
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from rest_framework.authtoken.models import Token
 
 import uuid
 from .utils import SendEmail
@@ -44,7 +43,6 @@ class SoftModel(models.Model):
         
     class Meta:
         abstract = True
-
 
 
 class User(AbstractUser):
@@ -101,6 +99,30 @@ class OTP(BaseModel):
         verbose_name_plural = "OTPs"
 
 
+#custom token model
+class UserToken(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255, unique=True, editable=False)
+    role = models.CharField(max_length=255, choices=(("api-use", "API Use"), ("app-use", "App Use")), default="api-use")
+
+    @classmethod
+    def generate_token(cls):
+        return str(uuid.uuid4())
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.token = self.generate_token()
+            
+        return super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.token
+    
+    class Meta:
+        verbose_name_plural = "User Token"
+        
+
+
 
 @receiver(post_save, sender=User)
 def User_created_handler(sender, instance, created, *args, **kwargs):
@@ -110,7 +132,8 @@ def User_created_handler(sender, instance, created, *args, **kwargs):
     if created:    
         
         #generating token
-        Token.objects.create(user=instance)  
+        new_token = UserToken.objects.create(user=instance, role="app-use")  
+        new_token.save()
         
         #sending email          
         subject = "Greetings from SB Care"

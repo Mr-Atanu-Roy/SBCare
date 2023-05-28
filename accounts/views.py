@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import User, OTP, UserProfile
-from .utils import current_time, check_str_special
+from accounts.models import User, OTP, UserProfile
+from accounts.utils import current_time, check_str_special
 
 # Create your views here.
 def signup(request):
@@ -308,7 +308,6 @@ def reset_password_link(request, token):
 
 
 #ajax calls
-
 @login_required(login_url="/auth/login")
 def submit_profile_form(request):
     try:

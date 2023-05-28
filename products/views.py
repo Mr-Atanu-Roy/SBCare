@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 
-from rest_framework.authtoken.models import Token
+from accounts.models import UserToken
 
 import requests
 
@@ -36,7 +36,7 @@ def get_short_url_ajax(request):
         }
         if request.method == "GET":
             
-            ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
+            ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
             
             if ACCESS_TOKEN:
                 headers = {
@@ -85,8 +85,7 @@ def create_short_url_ajax(request):
             dest = request.POST.get("dest")
             
             if len(dest) > 1 and (not dest.isspace()):
-                ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
-                
+                ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
                 if ACCESS_TOKEN:
                     headers = {
                         "Authorization": f"Token {ACCESS_TOKEN}",
@@ -147,7 +146,7 @@ def delete_short_url_ajax(request):
         if request.method == "GET":
             id = request.GET.get("id")
             if id:
-                ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
+                ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
                 try:
                     if ACCESS_TOKEN:
                         
@@ -197,7 +196,7 @@ def get_qrcode_ajax(request):
         }
         if request.method == "GET":
             
-            ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
+            ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
             
             if ACCESS_TOKEN:
                 headers = {
@@ -273,7 +272,7 @@ def create_qr_ajax(request):
                 payload["phone"] = phone
 
             if len(title)>1 and (not title.isspace()):
-                ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
+                ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
                 try:
                     if ACCESS_TOKEN:
                         headers = {
@@ -335,7 +334,7 @@ def delete_qr_ajax(request):
         if request.method == "GET":
             id = request.GET.get("id")
             if id:
-                ACCESS_TOKEN = Token.objects.filter(user=request.user).first()
+                ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
                 try:
                     if ACCESS_TOKEN:
                         

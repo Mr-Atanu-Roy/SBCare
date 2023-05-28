@@ -4,8 +4,8 @@ from django.http import Http404, HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from accounts.authentication import CustomTokenAuthentication
 
 from .models import QRCode
 from .serializers import QRCodeSerializer
@@ -15,7 +15,7 @@ from .serializers import QRCodeSerializer
 class GetCreateQR(APIView):
     '''This api will show and create qr-codes'''
     
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
     
     
@@ -65,7 +65,7 @@ class GetCreateQR(APIView):
 class GetDeleteQR(APIView):
     '''This api will delete qr-codes'''
     
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
 

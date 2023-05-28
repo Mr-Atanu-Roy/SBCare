@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from rest_framework.authtoken.models import Token
-
-from .models import User, UserProfile, OTP
+from accounts.models import User, UserProfile, OTP, UserToken
 from url_short_api.models import ShortURL
 from qr_code_api.models import QRCode
 
@@ -14,8 +12,8 @@ class OTPInline(admin.StackedInline):
     extra = 0
     classes = ['collapse']
     
-class TokenInline(admin.StackedInline):
-    model = Token
+class UserTokenInline(admin.StackedInline):
+    model = UserToken
     extra = 0
     classes = ['collapse']
     
@@ -54,7 +52,7 @@ class UserAdmin(admin.ModelAdmin):
         }),
     ]
     
-    inlines = [UserProfileInline, OTPInline, TokenInline, ShortURLInline, QRCodeInline]
+    inlines = [UserProfileInline, OTPInline, UserTokenInline, ShortURLInline, QRCodeInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
@@ -64,7 +62,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                 ['api_access', 'coins', 'gender', 'dob']
             ),
         }),
-        ("Residentialgol Details", {
+        ("Residential Details", {
             "fields": (
                 ['country', 'city', 'address1', 'address2']
             )
@@ -80,9 +78,20 @@ class OTPAdmin(admin.ModelAdmin):
             ),
         }),
     ]
+    
+class UserTokenAdmin(admin.ModelAdmin):
+    list_display = ('user', 'token', 'role', 'created_at')
+    fieldsets = [
+        ("Token Details", {
+            "fields": (
+                ['user', 'role']
+            ),
+        }),
+    ]
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(OTP, OTPAdmin)
+admin.site.register(UserToken, UserTokenAdmin)
 
