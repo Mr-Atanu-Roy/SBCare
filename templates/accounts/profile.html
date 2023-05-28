@@ -46,7 +46,7 @@
     <div class="my-12">
         <div class="mb-4">
             <div class="font-roboto font-semibold text-xl">Email Address</div>
-            <div class="font-roboto font-medium text-base mt-1">See details of your email address</div>
+            <div class="font-roboto font-medium text-sm text-gray-500 mt-1">See details of your email address</div>
         </div>
         <table class="font-roboto w-full table-fixed">
             <thead>
@@ -58,11 +58,11 @@
             </thead>
             <tbody>
                 <tr class="font-light border-collapse">
-                    <td class="p-2">{{user.email}}</td>
-                    <td class="p-2 pl-0">{% if user.is_verified %}Verified <span class="ml-1 text-green-600"><i
+                    <td class="p-2 break-words">{{user.email}}</td>
+                    <td class="p-2 pl-0 break-words">{% if user.is_verified %}Verified <span class="ml-1 text-green-600"><i
                                 class="fa fa-check-circle"></i></span> {%else%}Not Verified <span
                             class="ml-1 text-red-600"><i class="fa fa-times"></i></span> {%endif%}</td>
-                    <td class="p-2 pl-0">{{user.date_joined | date}}</td>
+                    <td class="p-2 pl-0 break-words">{{user.date_joined | date}}</td>
                 </tr>
             </tbody>
         </table>
@@ -74,7 +74,7 @@
     <div>
         <div class="mb-4">
             <div class="font-roboto font-semibold text-xl">Profile</div>
-            <div class="font-roboto font-medium text-base mt-1">Check/Update your profile</div>
+            <div class="font-roboto font-medium text-sm text-gray-500 mt-1">Check/Update your profile</div>
         </div>
         <div>
             <form action="" method="POST">
