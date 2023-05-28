@@ -111,6 +111,12 @@ class UserToken(BaseModel):
     
     def save(self, *args, **kwargs):
         if not self.pk:
+            # Check if a UserToken with role="app-use" already exists for the user
+            existing_app_use_token = UserToken.objects.filter(user=self.user, role="app-use").first()
+            if existing_app_use_token:
+                # Only allow one UserToken with role="app-use" per user
+                raise ValueError("A UserToken with role='app-use' already exists for this user")
+            
             self.token = self.generate_token()
             
         return super().save(*args, **kwargs)
