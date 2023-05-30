@@ -22,6 +22,8 @@
 
     <form action="" method="post" class="w-1/3">
         {% csrf_token %}
+        <div id="message-box" class="hidden mb-4">
+        </div>
         <div>
             <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Enter Password</label>
             <input type="password" id="password"
@@ -40,7 +42,7 @@
     <div class="my-6 mt-12">
         <div class="font-roboto font-semibold text-xl">Created Token</div>
     </div>
-    <table class="font-roboto w-full table-fixed">
+    <table class="font-roboto w-full table-fixed" id="token-table">
         <thead>
             <tr class="font-semibold text-lg border-collapse border-b-2 border-indigo-500">
                 <td class="pl-2">Token</td>
@@ -48,21 +50,7 @@
                 <td>Delete</td>
             </tr>
         </thead>
-        <tbody id="tokenTable">
-            <tr class="font-light border-collapse">
-                <td class="p-2 break-words">
-                    <span class="copyToken mr-1 text-indigo-500 cursor-pointer text-lg hover:text-indigo-700 transition" data-id="token"><i
-                            class="fa fa-clone"></i></span> {{user.email}}
-                </td>
-                <td class="p-2 pl-0 break-words">{{user.date_joined | date}}</td>
-                <td class="p-2 pl-0 break-words">
-                    <button
-                        class="deleteTokenBtn py-2.5 px-4 uppercase bg-red-300 font-medium cursor-pointer hover:bg-red-400 rounded-sm w-fit transition-all duration-300 ease-in-out"
-                        data-id="">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+        <tbody id="tokenTableBody">
         </tbody>
     </table>
 
@@ -80,6 +68,8 @@
 
 
     $(document).ready(function () {
+        let content = ``;
+
         //func to copy to clipboard
         function copyToClipboard(text) {
             var tempInput = $("<input>"); // Create a temporary input element
@@ -105,15 +95,141 @@
                 return dayDiff + " days ago";
             }
         }
-        
-        
-        
+
+
         //handles token copy
-        $(".copyToken").on("click", function (e) {
+        $(document).on("click", ".copyToken", function (e) {
             e.preventDefault();
             var token = $(this).data("id");
             copyToClipboard(token);
         });
+
+        //function to load token table body
+        function loadTokenTable() {
+
+            $.ajax({
+                type: "get",
+                url: "{% url 'get-auth-tokens' %}",
+                success: function (response) {
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+                    let tableData = ``;
+                    if (status == 200 && error == null) {
+                        if (message == "data fetched successfully") {
+                            tableData = ``;
+                            
+                            for (let index = data.length - 1; index >= 0; index--) {
+                                let id = data[index]["id"];
+                                let token = data[index]["token"];
+                                let created_at = data[index]["created_at"];
+
+                                tableData += `
+                                <tr class="font-light border-collapse">
+                                    <td class="p-2 break-words">
+                                        <span class="mr-1 text-indigo-500 cursor-pointer text-lg hover:text-indigo-700 transition"><i class="fa fa-clone copyToken" data-id="${token}"></i></span> ${token.slice(0, 6) + "........" + token.slice(-6)}
+                                    </td>
+                                    <td class="p-2 pl-0 break-words">${humanizeDateTime(created_at)}</td>
+                                    <td class="p-2 pl-0 break-words">
+                                        <button class="deleteTokenBtn py-2.5 px-4 uppercase bg-red-300 font-medium cursor-pointer hover:bg-red-400 rounded-sm w-fit transition-all duration-300 ease-in-out"
+                                            data-id="${id}">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>`;
+                            }
+                        } else if (message == "no records") {
+                            tableData = `
+                                <tr class="font-light border-collapse">
+                                    <td class="text-sm text-gray-500 pt-2">No token generated till now</td>
+                                </tr>`;
+                        }
+                    } else {
+                        tableData = `
+                            <tr class="font-light border-collapse">
+                                <td class="text-sm text-gray-500 pt-2">Could not fetch token details</td>
+                            </tr>`;
+                    }
+
+                    $("#tokenTableBody").html(tableData);
+                }
+            });
+        }
+
+        loadTokenTable();
+
+        //handles new token creation
+        $("#tokenFormSubmit").on("click", function (e) {
+            e.preventDefault();
+
+            let password = $("#password").val();
+            if (password != "") {
+                $.ajax({
+                    type: "post",
+                    url: "{% url 'create-auth-token' %}",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        pass: password,
+                    },
+                    success: function (response) {
+                        if (response.error == null && response.status == 201) {
+                            content = `
+                            <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">Token generated</span>
+                            </div>`;
+                        } else {
+                            content = `
+                            <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">${response.error}</span>
+                            </div>`;
+
+                        }
+
+                        $("#message-box").html(content);
+                        $("#message-box").css("display", "flex");
+                        setTimeout(function () {
+                            $("#message-box").css("display", "none");
+                        }, 3100);
+
+                        $("#password").val('');
+
+                        loadTokenTable();
+                    }
+
+                });
+
+            } else {
+                content = `
+                <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                    <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                    <span class="block sm:inline">Password is required</span>
+                </div>`;
+                $("#message-box").css("display", "flex");
+                $("#message-box").html(content);
+
+            }
+
+
+        });
+
+
+        $(document).on("click", ".deleteTokenBtn", function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: "get",
+                url: "{% url 'delete-auth-token' %}",
+                data: {
+                    id: $(this).data("id"),
+                },
+                success: function (response) {
+                    loadTokenTable();
+                }
+            });
+        })
 
 
     });

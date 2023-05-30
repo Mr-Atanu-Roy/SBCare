@@ -373,6 +373,3 @@ def delete_qr_ajax(request):
         # print(e)
         pass
         
-        
-
-    

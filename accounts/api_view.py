@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -16,7 +18,7 @@ class GetCreateAuthToken(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
-        tokens = UserToken.objects.filter(user=request.user)
+        tokens = UserToken.objects.filter(user=request.user, role="api-use")
         if tokens:
             token_serializer = UserTokenSerializer(tokens, many=True)
             response = {
@@ -40,10 +42,40 @@ class GetCreateAuthToken(APIView):
                 'token': str(new_token),
                 'error': None
             }
+            return Response(response, status=status.HTTP_201_CREATED)
         else:
             response = {
                 'token': None,
                 'error': "Failed to generate token"
             }
             
-        return Response(response)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+class DeleteAuthToken(APIView):
+    '''This api view is responsible for deleting a particular auth token'''
+    
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self, pk, user):
+        try:
+            return UserToken.objects.get(pk=pk, user=user)
+        except UserToken.DoesNotExist:
+            raise Http404
+        except Exception as e:
+            print(e)
+            
+    def delete(self, request, pk, format=None):
+        token = self.get_object(pk, request.user)
+        token.delete()
+        
+        response = {
+                "status": status.HTTP_204_NO_CONTENT,
+                "data": None,
+                "message": "deleted successfully"
+        }
+        return Response(response, status=status.HTTP_204_NO_CONTENT)
+        
+    
+    
