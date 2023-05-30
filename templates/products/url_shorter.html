@@ -134,9 +134,13 @@
                             content += `
                             <div class="url-box w-full flex-col justify-start items-center">
                                 <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
-
                                     <div class="flex-col items-center justify-between mr-6">
-                                        <button type="submit" class="p-0.5 delete-url-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
+                                        <div>
+                                            <button type="submit" class="p-0.5"> <i class="copyURL fa fa-clone text-indigo-500 cursor-pointer text-lg hover:text-indigo-700 transition" data-id="${short_url}"></i></button>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="p-0.5 delete-url-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 hover:text-indigo-800 transition cursor-pointer"></i></button>
+                                        </div>
                                     </div>
                                     <div>
                                         <div class="text-xs font-roboto font-extralight mb-1.5">
@@ -158,7 +162,7 @@
                             </div>`
                         }
                     } else if (data == null && message == "no records") {
-                        content = `<p class="font-roboto font-light">No URLs created till now</p>`;
+                        content = `<p class="font-roboto font-light text-gray-500 text-sm">No URLs created till now</p>`;
                     }
                     $("#url-box-container").html(content);
                 }
@@ -195,9 +199,13 @@
                         <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
                             <span class="block sm:inline">${message}</span>
-                            </div>`;
+                        </div>`;
+                        
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
+
+                        $("#title").val('');
+                        $("#dest").val('');
 
                     } else {
                         let message_block = `
@@ -254,6 +262,13 @@
             copyToClipboard(link);
 
             $("#modal-link-copy").html('Copied')
+        });
+
+        //handles qr link copy from list
+        $(document).on("click", ".copyURL", function (e) {
+            e.preventDefault();
+            var link = $(this).data("id");
+            copyToClipboard(link);
         });
 
     });

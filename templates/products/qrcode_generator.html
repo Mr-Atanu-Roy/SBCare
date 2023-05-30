@@ -189,8 +189,8 @@
                                 <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
 
                                     <div class="flex-col items-center justify-between mr-6">
-                                        <button type="submit" class="block p-0.5 delete-qr-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
-                                        <button class="block p-0.5" data-id="${id}"><a href="${qr_code}" download><i class="fa fa-download text-indigo-700 cursor-pointer"></i></a></button>
+                                        <button type="submit" class="block p-0.5 delete-qr-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 hover:text-red-800 transition cursor-pointer"></i></button>
+                                        <button class="block p-0.5" data-id="${id}"><a href="${qr_code}" download><i class="fa fa-download text-indigo-600 hover:text-indigo-800 transition cursor-pointer"></i></a></button>
                                     </div>
                                     <div>
                                         <div class="text-xs font-roboto font-extralight mb-1.5">
@@ -212,7 +212,7 @@
                             </div>`
                         }
                     } else if (data == null && message == "no records") {
-                        content = `<p class="font-roboto font-light">No QR Codes created till now</p>`;
+                        content = `<p class="font-roboto font-light text-sm text-gray-500">No QR Codes created till now</p>`;
                     }
                     $("#qr-box-container").html(content);
                 }
@@ -280,6 +280,14 @@
                             </div>`;
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
+
+                        $("#title").val(''),
+                        $("#url").val(''),
+                        $("#name").val(''),
+                        $("#email").val(''),
+                        $("#phone").val(''),
+                        $("#ssid").val(''),
+                        $("#password").val(''),
 
                     } else {
                         let message_block = `
