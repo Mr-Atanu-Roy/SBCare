@@ -50,14 +50,14 @@
         </div>
         <table class="font-roboto w-full table-fixed">
             <thead>
-                <tr class="font-semibold text-lg border-collapse border-b-2 border-indigo-500">
+                <tr class="font-semibold border-collapse border-b-2 border-indigo-500 text-base sm:text-lg">
                     <td class="pl-2">Email</td>
                     <td>Status</td>
                     <td>Registered On</td>
                 </tr>
             </thead>
             <tbody>
-                <tr class="font-light border-collapse">
+                <tr class="font-light border-collapse text-sm sm:text-base">
                     <td class="p-2 break-words">{{user.email}}</td>
                     <td class="p-2 pl-0 break-words">{% if user.is_verified %}Verified <span class="ml-1 text-green-600"><i
                                 class="fa fa-check-circle"></i></span> {%else%}Not Verified <span
