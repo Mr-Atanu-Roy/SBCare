@@ -36,17 +36,27 @@ class GetCreateAuthToken(APIView):
         return Response(response, status=status.HTTP_200_OK)
     
     def post(self, request, format=None):
-        new_token = UserToken.objects.create(user=request.user)
-        if new_token:
-            response = {
-                'token': str(new_token),
-                'error': None
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
+        no_tokens = UserToken.objects.filter(user=request.user, role="api-use")
+        if len(no_tokens) <= 10:
+        
+            new_token = UserToken.objects.create(user=request.user)
+            if new_token:
+                response = {
+                    'token': str(new_token),
+                    'error': None
+                }
+                return Response(response, status=status.HTTP_201_CREATED)
+            else:
+                response = {
+                    'token': None,
+                    'error': "Failed to generate token"
+                }
+                
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
         else:
             response = {
                 'token': None,
-                'error': "Failed to generate token"
+                'error': "Token creation limit is 10. Delete a token to create more"
             }
             
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
