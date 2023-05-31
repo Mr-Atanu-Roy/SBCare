@@ -26,6 +26,7 @@ urlpatterns = [
     path("", home, name="home"),
     
     path("auth/", include("accounts.urls")),
+    path("pricing/", include('pricing.urls')),
     path("products/", include("products.urls")),
     
     path("r/", include("url_short_api.urls")),

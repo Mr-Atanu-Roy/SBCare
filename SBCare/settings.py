@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     
     #own
     'accounts',
+    'pricing',
     'products',
     
     'url_short_api',
