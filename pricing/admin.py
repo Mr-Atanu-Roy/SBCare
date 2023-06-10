@@ -4,11 +4,11 @@ from .models import Pricing
 # Register your models here.
 
 class PricingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'plan_name', 'pricing')
+    list_display = ('plan_name', 'pricing_month', 'url_day', 'qr_day', 'api_day')
     fieldsets = [
         ("Plan Details", {
             "fields": (
-                ['plan_name', 'pricing', 'description']
+                ['plan_name', 'pricing_month', 'url_day', 'qr_day', 'api_day', 'description']
             ),
         }),
     ]

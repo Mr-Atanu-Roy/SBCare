@@ -10,7 +10,10 @@ from accounts.utils import BaseModel
 class Pricing(BaseModel):
     
     plan_name = models.CharField(max_length=300)
-    pricing = models.IntegerField()
+    pricing_month = models.IntegerField(verbose_name="Pricing per Month", default=0)
+    url_day = models.IntegerField(default=0, verbose_name="URL per Day")
+    qr_day = models.IntegerField(default=0, verbose_name="QR per Day")
+    api_day = models.IntegerField(default=0, verbose_name="API Request per Day")
     description = models.TextField(null=True, blank=True)
     
     def __str__(self):

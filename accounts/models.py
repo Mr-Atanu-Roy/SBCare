@@ -54,10 +54,7 @@ class UserProfile(BaseModel):
     
     #pricing section
     api_access = models.BooleanField(default=False)     #true if user is allowed to access api ny admin
-    plan = models.ForeignKey(Pricing, on_delete=models.SET_NULL, null=True)
-    url_mo = models.IntegerField(default=0)
-    qr_mo = models.IntegerField(default=0)
-    api_mo = models.IntegerField(default=0)
+    plan = models.ForeignKey(Pricing, default=1,  on_delete=models.SET_NULL, null=True)
     last_paid = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
@@ -160,6 +157,5 @@ def OTP_created_handler(sender, instance, created, *args, **kwargs):
         
         #starting the thread to send email
         SendEmail(subject, message, instance.user.email).start()
-
 
 

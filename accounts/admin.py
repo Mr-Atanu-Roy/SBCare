@@ -68,10 +68,10 @@ class UserProfileAdmin(admin.ModelAdmin):
                 ['country', 'city', 'address1', 'address2']
             )
         }),
-        ("Product/API Details", {
+        ("Product Details", {
             "fields": (
-                ['api_access', 'plan', 'last_paid', 'url_mo', 'qr_mo', 'api_mo']
-            ), 'classes': ['collapse']
+                ['api_access', 'plan', 'last_paid']
+            )
         }), 
     ]
 
