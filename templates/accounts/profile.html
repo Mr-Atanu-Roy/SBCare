@@ -7,17 +7,23 @@
 <div class="h-full w-full p-6 md:p-8 lg:px-12">
     <div class="flex items-start justify-evenly flex-wrap">
         <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
-            <div class="font-bold text-3xl">
-                {{user_profile.coins}}
+            <div class="font-light text-sm mt-0.5 mb-2.5 text-gray-600">
+                With {{user_profile.plan | title}} plan you can
             </div>
-            <div class="font-light text-sm mt-2.5 mb-1.5">
-                You have {{user_profile.coins}} coins remaining
+            <div class="font-light text-sm mb-0.5">
+                1. Short <span class="font-bold">{{user_profile.plan.url_day}} URLs</span>/Day
+            </div>
+            <div class="font-light text-sm mb-0.5">
+                2. Create <span class="font-bold">{{user_profile.plan.qr_day}} QR Codes</span>/Day
+            </div>
+            <div class="font-light text-sm mb-0.5">
+                3. Send <span class="font-bold">{{user_profile.plan.api_day}} API requests</span>/Day
             </div>
             <div class="flex items-center justify-between">
                 <div>
-                    <a href=""
-                        class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Buy
-                        Coins</a>
+                    <a href="{% url 'buy_plan' %}"
+                        class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Upgrade
+                        Plan</a>
                 </div>
                 <div class="w-14 h-14 rounded-full bg-indigo-400 text-xl text-white flex items-center justify-center">
                     <i class="fa fa-usd"></i>
@@ -26,14 +32,14 @@
         </div>
         <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
             <div class="font-bold text-3xl">
-                Free
+                {{user_profile.plan | title}}
             </div>
             <div class="font-light text-sm mt-2.5 mb-1.5">
-                Currently you have free plan. You don't have API access
+                Currently you have {{user_profile.plan | upper}} plan. You have last paid on {{user_profile.last_paid | date}}
             </div>
             <div class="flex items-center justify-between">
                 <div>
-                    <a href=""
+                    <a href="{% url 'buy_plan' %}"
                         class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Upgrade
                         Plan</a>
                 </div>
