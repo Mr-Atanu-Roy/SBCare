@@ -6,7 +6,7 @@ from accounts.utils import BaseModel
 
 class Pricing(BaseModel):
     
-    plan_name = models.CharField(max_length=300)
+    plan_name = models.CharField(max_length=300, unique=True)
     pricing_month = models.IntegerField(verbose_name="Pricing per Month", default=0)
     url_day = models.IntegerField(default=0, verbose_name="URL per Day")
     qr_day = models.IntegerField(default=0, verbose_name="QR per Day")

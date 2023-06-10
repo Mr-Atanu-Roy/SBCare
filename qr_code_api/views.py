@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.authentication import CustomTokenAuthentication
 
 from .models import QRCode
+from .throttle import QRCodeThrottle
 from .serializers import QRCodeSerializer
 
 
@@ -17,6 +18,7 @@ class GetCreateQR(APIView):
     
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [QRCodeThrottle]
     
     
     def get(self, request, format=None):
@@ -67,6 +69,7 @@ class GetDeleteQR(APIView):
     
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [QRCodeThrottle]
 
 
     def get_object(self, pk, user):

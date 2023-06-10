@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.authentication import CustomTokenAuthentication
 
 from .models import ShortURL
+from .throttle import URLShortCodeThrottle
 from .serializers import ShortURLSerializer
 
 # Create your views here.
@@ -18,6 +19,7 @@ class GetCreateShortURL(APIView):
     
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [URLShortCodeThrottle]
 
     def get(self, request, format=None):
         short_urls = ShortURL.objects.filter(user=request.user)
@@ -66,6 +68,7 @@ class GetUpdateDeleteShortURL(APIView):
     
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [URLShortCodeThrottle]
     
     def get_object(self, pk, user):
         try:
