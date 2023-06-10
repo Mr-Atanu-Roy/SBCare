@@ -2,9 +2,6 @@ from django.db import models
 from accounts.utils import BaseModel
 
 
-#choices
-
-
 # Create your models here.
 
 class Pricing(BaseModel):
@@ -21,5 +18,7 @@ class Pricing(BaseModel):
     
     class Meta:
         verbose_name_plural = "Pricing and Plans"
+
+
 
 

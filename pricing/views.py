@@ -12,7 +12,7 @@ def pricing(request):
         plans = Pricing.objects.all()
             
     except Exception as e:
-        print(e)
+        # print(e)
         pass
     
     
@@ -21,7 +21,7 @@ def pricing(request):
     return render(request, "./pricing/pricing.html", context)
 
 
-def buy_pricing(request):
+def buy_plan(request):
     return HttpResponse(request.GET.get("plan"))
 
 
