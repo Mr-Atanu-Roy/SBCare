@@ -15,7 +15,6 @@ class CustomTokenAuthentication(BaseAuthentication):
             try:
                 user_token = UserToken.objects.get(token=token)
                 user = user_token.user
-                print(user)
                 try:
                     user_profile = UserProfile.objects.get(user=user, api_access=True)
                     if user_profile:
