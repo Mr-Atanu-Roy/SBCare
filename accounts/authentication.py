@@ -1,7 +1,7 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from accounts.models import UserToken
+from accounts.models import UserToken, UserProfile
 
 class CustomTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -15,7 +15,15 @@ class CustomTokenAuthentication(BaseAuthentication):
             try:
                 user_token = UserToken.objects.get(token=token)
                 user = user_token.user
-                return (user, None)
+                print(user)
+                try:
+                    user_profile = UserProfile.objects.get(user=user, api_access=True)
+                    if user_profile:
+                        return (user, None)
+                    
+                except UserProfile.DoesNotExist:
+                    raise AuthenticationFailed('Invalid token. User with this token is not allowed to access API')
+                    
             except UserToken.DoesNotExist:
                 raise AuthenticationFailed('Invalid token')
         
