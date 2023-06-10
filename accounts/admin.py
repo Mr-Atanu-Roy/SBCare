@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from accounts.models import User, UserProfile, OTP, UserToken
+from accounts.models import User, UserProfile, OTP, UserToken, PaymentsHistory
 from url_short_api.models import ShortURL
 from qr_code_api.models import QRCode
 
@@ -97,9 +97,27 @@ class UserTokenAdmin(admin.ModelAdmin):
         }),
     ]
 
+    
+class PaymentsHistoryAdmin(admin.ModelAdmin):
+    list_display = ('payment_id', 'user', 'amount', 'is_paid', 'created_at')
+    fieldsets = [
+        ("Payment Details", {
+            "fields": (
+                ['user', 'plan', 'is_paid', 'purpose', 'amount', 'currency', 'phone']
+            ),
+        }),
+        ("More Details", {
+            "fields": (
+                ['payment_request_id', 'order_id', 'payment_status', 'payment_mode']
+            ),'classes': ['collapse']
+        }),
+    ]
+
+
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(OTP, OTPAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
-
+admin.site.register(PaymentsHistory, PaymentsHistoryAdmin)

@@ -1,0 +1,115 @@
+{% extends '../blocks/base1.html' %}
+
+{% block title %}SB Care | Buy Plan{% endblock title %}
+
+{% block styles %}
+<style>
+    header {
+        display: none !important;
+    }
+</style>
+{% endblock styles %}
+
+{% block body %}
+
+
+<section id="buy_plan" class="min-h-screen w-full bg-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 md:gap-8 w-full h-full p-10">
+        <div class="border p-12 rounded-lg font-roboto bg-white" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% if messages %}
+
+                {% for message in messages %}
+                <div class="{% if message.tags %}{{message.tags}}{% endif %} font-roboto font-medium px-4 py-3 rounded relative mb-3"
+                    role="alert">
+                    <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                    <span class="block sm:inline">{{message}}</span>
+                </div>
+                {% endfor %}
+
+                {% endif %}
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Plan</label>
+                    <select id="plan" name="plan"
+                        class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light font-roboto mt-1 mb-5">
+                        <option value="free" class="uppercase" {% if user_plan == 'free' %} selected {% endif %}>FREE</option>
+                        <option value="pro" class="uppercase" {% if user_plan == 'pro' %} selected {% endif %}>PRO</option>
+                        <option value="business" class="uppercase" {% if user_plan == 'business' %} selected {% endif %}>BUSINESS</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Name</label>
+                    <input type="text" value="{{user.first_name}} {{user.last_name}}"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light cursor-not-allowed"
+                        disabled />
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">E-mail</label>
+                    <input type="text" value="{{user.email}}"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light cursor-not-allowed"
+                        disabled />
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Phone</label>
+                    <input type="text" value="" name="phone"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light hover:border-indigo-600 focus:border-indigo-600" />
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="email_check" id="email_check" checked>
+                        <label for="email_check" class="text-sm ml-2 cursor-pointer">Receive Email Confirmation</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" name="phone_check" id="phone_check">
+                        <label for="phone_check" class="text-sm ml-2 cursor-pointer">Receive Phone Confirmation</label>
+                    </div>
+                    
+                </div>
+                <div class="mt-8">
+                    <button type="submit"
+                        class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                        <span class="inline-block mr-2">Proceed to Pay</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="w-4 h-4 inline-block">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="border p-12 rounded-lg bg-white" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <div class="mb-3">
+                <p class="font-roboto font-semibold">What you are getting</p>
+            </div>
+            <div>
+                <div class="flex flex-col justify-between p-8 transition-shadow duration-300 bg-white border rounded-lg sm:items-center w-1/2">
+                <div class="text-center">
+                    <div class="text-lg font-semibold uppercase text-indigo-600 mb-2">Free</div>
+                    <div class="flex items-center justify-center mt-2">
+                        <div class="mr-1 text-5xl font-bold">&#8377; 1000</div> <span class="text-gray-600">/mo</span>
+                    </div>
+                    <div class="mt-3.5 space-y-3">
+                        <div class="text-gray-700 flex items-center justify-start">
+                            <i class="fa fa-circle mr-3 text-indigo-700"></i>
+                            <span>URL Shorting/Day</span>
+                        </div>
+                        <div class="text-gray-700 flex items-center justify-start">
+                            <i class="fa fa-circle mr-3 text-indigo-700"></i>
+                            <span>URL Shorting/Day</span>
+                        </div>
+                        <div class="text-gray-700 flex items-center justify-start">
+                            <i class="fa fa-circle mr-3 text-indigo-700"></i>
+                            <span>URL Shorting/Day</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock body %}

@@ -1,0 +1,36 @@
+{% extends '../blocks/base1.html' %}
+
+{% block title %}SB Care | Payment Success{% endblock title %}
+
+{% block body %}
+
+
+<section id="payment_success" class="pt-24 w-full flex items-center justify-center">
+
+    <div class="rounded-lg shadow-lg py-10 px-10 font-roboto">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="{% if message.tags %}{{message.tags}}{% endif %} font-roboto font-medium py-3 rounded relative mb-3 px-10"
+            role="alert">
+            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+            <span class="block sm:inline">{{message}}</span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="px-12">
+            <div class="font-bold text-xl capitalize"> {% if status == True %} <i
+                    class="fa fa-check text-teal-700 mr-2.5"></i> Payment Successful {% else %} <i
+                    class="fa fa-times text-red-700 mr-2.5"></i> Payment Failed {% endif %}</div>
+            <div class="mt-6">
+                <div class="py-1">Total Amount : <span class="font-bold">{{amount}}</span></div>
+                <div class="py-1">Plan: <span class="uppercase font-bold">{{plan}}</span></div>
+                <div class="py-1">Date: <span class="font-bold">{{date | date}}</span></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+
+
+{% endblock body %}

@@ -109,6 +109,26 @@ class UserToken(BaseModel):
         
 
 
+class PaymentsHistory(BaseModel):
+    payment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    plan = models.ForeignKey(Pricing, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    order_id = models.CharField(max_length=500, null=True, blank=True)
+    payment_request_id = models.CharField(max_length=500, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+    amount = models.CharField(max_length=255)
+    currency = models.CharField(max_length=255, default="INR")
+    purpose = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=12, blank=True, null=True)
+    payment_status = models.CharField(max_length = 255, default = "not done")
+    payment_mode = models.CharField(max_length = 255, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Payment History"
+        
+    def __str__(self):
+        return str(self.payment_id)
+
 
 @receiver(post_save, sender=User)
 def User_created_handler(sender, instance, created, *args, **kwargs):
