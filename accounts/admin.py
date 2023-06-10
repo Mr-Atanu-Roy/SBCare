@@ -31,6 +31,7 @@ class QRCodeInline(admin.TabularInline):
     extra = 0
     classes = ['collapse']
 
+
     
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'first_name', 'is_verified', 'last_login', 'is_staff')
@@ -55,11 +56,11 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [UserProfileInline, OTPInline, UserTokenInline, ShortURLInline, QRCodeInline]
     
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
+    list_display = ('id', 'user', 'api_access', 'gender', 'country', 'city')
     fieldsets = [
         ("User Details", {
             "fields": (
-                ['api_access', 'coins', 'gender', 'dob']
+                ['gender', 'dob']
             ),
         }),
         ("Residential Details", {
@@ -67,7 +68,14 @@ class UserProfileAdmin(admin.ModelAdmin):
                 ['country', 'city', 'address1', 'address2']
             )
         }),
+        ("Product/API Details", {
+            "fields": (
+                ['api_access', 'plan', 'last_paid', 'url_mo', 'qr_mo', 'api_mo']
+            ), 'classes': ['collapse']
+        }), 
     ]
+
+    
     
 class OTPAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'otp', 'purpose', 'is_used', 'created_at')

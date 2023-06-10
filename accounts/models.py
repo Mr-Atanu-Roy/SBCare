@@ -1,14 +1,16 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
-from .manager import Usermanager, NonDelete
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
+from .utils import BaseModel, SendEmail
+from .manager import Usermanager
+from pricing.models import Pricing
+
 import uuid
-from .utils import SendEmail
 
 #choices
 gender_choices = (
@@ -19,31 +21,6 @@ gender_choices = (
 
 
 # Create your models here.
-
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
-        
-        
-class SoftModel(models.Model):
-    is_deleted = models.BooleanField(default=False)
-    
-    everything = models.Manager()
-    objects = NonDelete()
-
-    def delete(self):
-        self.is_deleted = True
-        self.save()
-        
-    def restore(self):
-        self.is_deleted = False
-        self.save()
-        
-    class Meta:
-        abstract = True
 
 
 class User(AbstractUser):
@@ -75,8 +52,13 @@ class UserProfile(BaseModel):
     address1 = models.TextField(blank=True, null=True)
     address2 = models.TextField(blank=True, null=True)
     
-    coins = models.IntegerField(default=0)
-    api_access = models.BooleanField(default=False)
+    #pricing section
+    api_access = models.BooleanField(default=False)     #true if user is allowed to access api ny admin
+    plan = models.ForeignKey(Pricing, on_delete=models.SET_NULL, null=True)
+    url_mo = models.IntegerField(default=0)
+    qr_mo = models.IntegerField(default=0)
+    api_mo = models.IntegerField(default=0)
+    last_paid = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return str(self.user)
@@ -160,7 +142,7 @@ def User_created_handler(sender, instance, created, *args, **kwargs):
 
 
 @receiver(post_save, sender=OTP)
-def User_created_handler(sender, instance, created, *args, **kwargs):
+def OTP_created_handler(sender, instance, created, *args, **kwargs):
     '''
     This signal will be executed each time a new otp is created. This signal is responsible for generating a token creating otp for email verification/reset password and sending that via email
     '''
@@ -179,4 +161,5 @@ def User_created_handler(sender, instance, created, *args, **kwargs):
         #starting the thread to send email
         SendEmail(subject, message, instance.user.email).start()
 
-        
+
+

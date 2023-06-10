@@ -1,3 +1,6 @@
+from django.db import models
+from .manager import NonDelete
+
 import datetime
 import pytz
 from django.core.mail import send_mail
@@ -14,6 +17,34 @@ tz = pytz.timezone(settings.TIME_ZONE)
 
 # Get the current time in the timezone
 current_time = datetime.datetime.now(tz)
+
+
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
+        
+        
+class SoftModel(models.Model):
+    is_deleted = models.BooleanField(default=False)
+    
+    everything = models.Manager()
+    objects = NonDelete()
+
+    def delete(self):
+        self.is_deleted = True
+        self.save()
+        
+    def restore(self):
+        self.is_deleted = False
+        self.save()
+        
+    class Meta:
+        abstract = True
+
+
 
 def check_str_special(string):
     if special_char_regex.search(string):
