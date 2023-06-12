@@ -37,6 +37,9 @@
             <div class="font-light text-sm mt-2.5 mb-1.5">
                 Currently you have {{user_profile.plan | upper}} plan. You have last paid on {{user_profile.last_paid | date}}
             </div>
+            <div class="font-light text-sm mt-2.5 mb-1.5">
+                Your Plan Expires on {{user_profile.plan_expires | date}}
+            </div>
             <div class="flex items-center justify-between">
                 <div>
                     <a href="{% url 'buy_plan' %}"

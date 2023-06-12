@@ -56,6 +56,7 @@ class UserProfile(BaseModel):
     api_access = models.BooleanField(default=False)     #true if user is allowed to access api ny admin
     plan = models.ForeignKey(Pricing, default=1,  on_delete=models.SET_NULL, null=True)
     last_paid = models.DateTimeField(null=True, blank=True)
+    plan_expires = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return str(self.user)
@@ -118,6 +119,7 @@ class PaymentsHistory(BaseModel):
     is_paid = models.BooleanField(default=False)
     amount = models.CharField(max_length=255)
     currency = models.CharField(max_length=255, default="INR")
+    billed_for = models.CharField(choices=(("1", "1 Month"), ("3", "3 Month"), ("6", "6 Month"), ("12", "12 Month")), default="1", verbose_name="Billed for/mo", max_length=255)
     purpose = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=12, blank=True, null=True)
     payment_status = models.CharField(max_length = 255, default = "not done")

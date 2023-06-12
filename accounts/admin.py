@@ -54,6 +54,7 @@ class UserAdmin(admin.ModelAdmin):
     ]
     
     inlines = [UserProfileInline, OTPInline, UserTokenInline, ShortURLInline, QRCodeInline]
+  
     
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'api_access', 'gender', 'country', 'city')
@@ -70,7 +71,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         }),
         ("Product Details", {
             "fields": (
-                ['api_access', 'plan', 'last_paid']
+                ['api_access', 'plan', 'last_paid', 'plan_expires']
             )
         }), 
     ]
@@ -87,6 +88,9 @@ class OTPAdmin(admin.ModelAdmin):
         }),
     ]
     
+    ordering = ['-created_at']
+    
+    
 class UserTokenAdmin(admin.ModelAdmin):
     list_display = ('user', 'token', 'role', 'created_at')
     fieldsets = [
@@ -96,6 +100,8 @@ class UserTokenAdmin(admin.ModelAdmin):
             ),
         }),
     ]
+    
+    ordering = ['-created_at']
 
     
 class PaymentsHistoryAdmin(admin.ModelAdmin):
@@ -103,7 +109,7 @@ class PaymentsHistoryAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Payment Details", {
             "fields": (
-                ['user', 'plan', 'is_paid', 'purpose', 'amount', 'currency', 'phone']
+                ['user', 'plan', 'is_paid', 'purpose', 'amount', 'currency', 'phone', 'billed_for']
             ),
         }),
         ("More Details", {
@@ -113,6 +119,7 @@ class PaymentsHistoryAdmin(admin.ModelAdmin):
         }),
     ]
 
+    ordering = ['-created_at']
 
 
 
