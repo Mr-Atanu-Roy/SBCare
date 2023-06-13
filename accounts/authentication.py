@@ -2,6 +2,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
 from accounts.models import UserToken, UserProfile
+from accounts.utils import current_time
 
 class CustomTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -18,7 +19,15 @@ class CustomTokenAuthentication(BaseAuthentication):
                 try:
                     user_profile = UserProfile.objects.get(user=user, api_access=True)
                     if user_profile:
-                        return (user, None)
+                        if user_profile.plan_expires < current_time:
+                        # if user_profile.plan_expires > current_time:
+                            if request.method == "POST" or request.method == "PUT" or request.method == "PATCH":
+                                raise AuthenticationFailed('Your Plan has expired. Please renew it')
+                            else:
+                                return (user, None)
+                        else:
+                            return (user, None)
+                            
                     
                 except UserProfile.DoesNotExist:
                     raise AuthenticationFailed('Invalid token. User with this token is not allowed to access API')

@@ -48,18 +48,24 @@ def get_short_url_ajax(request):
                 # Send the GET request
                 response = requests.get(url, headers=headers)
                 res_json = response.json()
-                if response.status_code == 200:                    
-                    ret_res["data"] = res_json["data"]
-                    ret_res["message"] = res_json["message"]
-                    ret_res["status"] = response.status_code
                 
-                else:                       
-                    ret_res["error"] = "error"
-                    ret_res["status"] = response.status_code
+                detail = res_json.get("detail")
+                if detail:
+                    ret_res["message"] = detail
+                    ret_res["status"] = 404
+                    
+                else:   
+                    if response.status_code == 200:                    
+                        ret_res["data"] = res_json["data"]
+                        ret_res["message"] = res_json["message"]
+                        ret_res["status"] = response.status_code
+                    
+                    else:                       
+                        ret_res["error"] = "error"
+                        ret_res["status"] = response.status_code
             
             else:
                 ret_res["error"] = "Invalid request"
-            
             
             return JsonResponse(ret_res, safe=False)
         
@@ -101,20 +107,27 @@ def create_short_url_ajax(request):
                     # Send the POST request
                     response = requests.post(url, headers=headers, json=payload)
                     res_json = response.json()
-                    if response.status_code == 201:
-                        shorted_url = res_json["data"]["short_url"]
+
+                    detail = res_json.get("detail")
+                    if detail:
+                        ret_res["message"] = detail
+                        ret_res["status"] = 404
                         
-                        ret_res["data"] = shorted_url
-                        ret_res["message"] = res_json["message"]
-                        ret_res["status"] = response.status_code
-                    
-                    else:
-                        error = ""
-                        for _, value in res_json["message"].items():
-                            error += value[0]
+                    else:   
+                        if response.status_code == 201:
+                            shorted_url = res_json["data"]["short_url"]
                             
-                        ret_res["error"] = error
-                        ret_res["status"] = response.status_code
+                            ret_res["data"] = shorted_url
+                            ret_res["message"] = res_json["message"]
+                            ret_res["status"] = response.status_code
+                        
+                        else:
+                            error = ""
+                            for _, value in res_json["message"].items():
+                                error += value[0]
+                                
+                            ret_res["error"] = error
+                            ret_res["status"] = response.status_code
                 
                 else:
                     ret_res["error"] = "Invalid request"
@@ -122,7 +135,6 @@ def create_short_url_ajax(request):
             else:
                 ret_res["error"] = "Destination is required"
                 ret_res["status"] = 404
-            
             
             return JsonResponse(ret_res, safe=False)
         
@@ -160,14 +172,20 @@ def delete_short_url_ajax(request):
                         # Send the DELETE request
                         response = requests.delete(url, headers=headers)
                         res_json = response.json()
-                        if response.status_code == 204:                           
-                            ret_res["data"] = res_json["data"]
-                            ret_res["message"] = res_json["message"]
-                            ret_res["status"] = response.status_code
-                        
-                        else:
-                            ret_res["error"] = res_json["detail"]
-                            ret_res["status"] = response.status_code
+                        detail = res_json.get("detail")
+                        if detail:
+                            ret_res["message"] = detail
+                            ret_res["status"] = 404
+                            
+                        else:   
+                            if response.status_code == 204:                           
+                                ret_res["data"] = res_json["data"]
+                                ret_res["message"] = res_json["message"]
+                                ret_res["status"] = response.status_code
+                            
+                            else:
+                                ret_res["error"] = res_json["detail"]
+                                ret_res["status"] = response.status_code
                         
                     else:
                         ret_res["error"] = "Invalid request"  
@@ -208,14 +226,22 @@ def get_qrcode_ajax(request):
                 # Send the GET request
                 response = requests.get(url, headers=headers)
                 res_json = response.json()
-                if response.status_code == 200:                    
-                    ret_res["data"] = res_json["data"]
-                    ret_res["message"] = res_json["message"]
-                    ret_res["status"] = response.status_code
                 
-                else:                       
-                    ret_res["error"] = "error"
-                    ret_res["status"] = response.status_code
+                detail = res_json.get("detail")
+                
+                if detail:
+                    ret_res["message"] = detail
+                    ret_res["status"] = 404
+                    
+                else:  
+                    if response.status_code == 200:                    
+                        ret_res["data"] = res_json["data"]
+                        ret_res["message"] = res_json["message"]
+                        ret_res["status"] = response.status_code
+                    
+                    else:                       
+                        ret_res["error"] = "error"
+                        ret_res["status"] = response.status_code
             
             else:
                 ret_res["error"] = "Invalid request"
@@ -285,22 +311,29 @@ def create_qr_ajax(request):
                         response = requests.post(url, headers=headers, json=payload)
                         res_json = response.json()
                         
-                        if response.status_code == 201:                            
-                            ret_res["data"] = res_json["data"]
-                            ret_res["message"] = res_json["message"]
-                            ret_res["status"] = response.status_code
-                        
-                        else:
-                            error = ""
-                            for key, value in res_json["message"].items():
-                                if key.lower() == "non_field_errors":
-                                    error += f"{value[0]} "
-                                else:
-                                    error += f"{key}: {value[0]} "
+                        detail = res_json.get("detail")
+                
+                        if detail:
+                            ret_res["message"] = detail
+                            ret_res["status"] = 404
+                            
+                        else:  
+                            if response.status_code == 201:                            
+                                ret_res["data"] = res_json["data"]
+                                ret_res["message"] = res_json["message"]
+                                ret_res["status"] = response.status_code
+                            
+                            else:
+                                error = ""
+                                for key, value in res_json["message"].items():
+                                    if key.lower() == "non_field_errors":
+                                        error += f"{value[0]} "
+                                    else:
+                                        error += f"{key}: {value[0]} "
+                                        
                                     
-                                
-                            ret_res["error"] = error
-                            ret_res["status"] = response.status_code
+                                ret_res["error"] = error
+                                ret_res["status"] = response.status_code
                     
                     else:
                         ret_res["error"] = "Invalid request"

@@ -211,9 +211,16 @@
                                 </div>
                             </div>`
                         }
-                    } else if (data == null && message == "no records") {
-                        content = `<p class="font-roboto font-light text-sm text-gray-500">No QR Codes created till now</p>`;
+                    } else if (data == null && message != null) {
+                        if(message == "no records"){
+                            content = `<p class="font-roboto font-light text-sm text-gray-500">No QR Codes created till now</p>`;
+                        }else{
+                            content = `<p class="font-roboto font-light text-gray-500 text-sm">${message}</p>`;
+                        }
+                    }else if (error != null){
+                        content = `<p class="font-roboto font-light text-gray-500 text-sm">${error}</p>`;
                     }
+                    
                     $("#qr-box-container").html(content);
                 }
             });
@@ -289,7 +296,7 @@
                         $("#ssid").val('');
                         $("#password").val('');
 
-                    } else {
+                    }else if(message == null) {
                         let message_block = `
                         <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
@@ -297,6 +304,15 @@
                         </div>`;
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
+                    }else{
+                        let message_block = `
+                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message}</span>
+                        </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
+
                     }
 
                     loadCreatedQRs();
@@ -321,11 +337,9 @@
                     let error = response.error;
                     let status = response.status;
                     loadCreatedQRs();
-                    // if (error == null && message == "deleted successfully") {
-                    // }else{
-                    //     // alert(message+" Reload page to see changes");
-                    //     alert(error);
-                    // }
+                    if (message != null) {
+                        alert(message);
+                    }
 
 
                 }
