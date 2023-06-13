@@ -73,8 +73,9 @@ def buy_plan(request):
                 amount = round((amount + get_percent(amount, TAX)), 2)*bill_for
                 #adding discount
                 amount = round((amount - get_percent(amount, discount)), 2)
-                
-                new_payment, _ = PaymentsHistory.objects.get_or_create(user=request.user, plan=get_plan, amount=amount, billed_for=str(bill_for), purpose=f"Buy Plan-{user_plan}")
+
+                start_time = timezone.now() - timedelta(minutes=15)
+                new_payment, created = PaymentsHistory.objects.get_or_create(user=request.user, plan=get_plan, amount=amount, billed_for=str(bill_for), purpose=f"Buy Plan-{user_plan}", created_at__gte=start_time)
                 
                 if phone == "" and phone_check is not None:
                     messages.error(request, "phone number is required")
@@ -99,9 +100,13 @@ def buy_plan(request):
                         redirect_long_url = response["payment_request"]["longurl"]
                         
                     else:
-                        custom_payment_id = ""
-                        custom_payment_id = custom_payment_id.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(20))
-                        custom_payment_id = "SB_"+custom_payment_id
+                        if not created:
+                            custom_payment_id = ""
+                            custom_payment_id = custom_payment_id.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(20))
+                            custom_payment_id = "SB_"+custom_payment_id
+                        else:
+                            custom_payment_id = new_payment.order_id
+                            
                         redirect_long_url = f"{settings.BASE_URL}pricing/payment-success/?payment_request_id={custom_payment_id}"
                         
                         new_payment.order_id = custom_payment_id
