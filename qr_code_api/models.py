@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.files.base import ContentFile
 
-from accounts.models import User, BaseModel, SoftModel
+from accounts.models import User
+from accounts.utils import BaseModel, SoftModel
 from url_short_api.models import source_choices
 
 from io import BytesIO

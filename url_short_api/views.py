@@ -5,10 +5,11 @@ from django.conf import settings
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from accounts.authentication import CustomTokenAuthentication
 
 from .models import ShortURL
+from .throttle import URLShortCodeThrottle
 from .serializers import ShortURLSerializer
 
 # Create your views here.
@@ -16,8 +17,9 @@ from .serializers import ShortURLSerializer
 class GetCreateShortURL(APIView):
     '''This api will show and create urls'''
     
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [URLShortCodeThrottle]
 
     def get(self, request, format=None):
         short_urls = ShortURL.objects.filter(user=request.user)
@@ -62,10 +64,11 @@ class GetCreateShortURL(APIView):
             
 
 class GetUpdateDeleteShortURL(APIView):
-    '''This api will show, update, delete a perticular shorturl model instance'''
+    '''This api will show, update, delete a particular shorturl model instance'''
     
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [URLShortCodeThrottle]
     
     def get_object(self, pk, user):
         try:

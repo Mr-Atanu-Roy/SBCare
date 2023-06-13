@@ -1,0 +1,239 @@
+{% extends '../blocks/base2.html' %}
+
+{% block title %}Developer Settings | SB Care{% endblock title %}
+
+{% block body %}
+
+
+<div class="h-full w-full p-6 pt-10 sm:p-6 md:p-8 lg:px-12">
+
+
+    <div class="mb-4">
+        <div class="font-roboto font-semibold text-2xl">API</div>
+        <div class="font-roboto font-medium text-sm text-gray-500 mt-1">For documentation on how to use our API check
+            our <span><a href="" class="text-blue-700 italic">API Documentation</a></span></div>
+    </div>
+    <hr class="w-full">
+    <div class="my-8">
+        <div class="font-roboto font-semibold text-xl">Access Token</div>
+        <div class="font-roboto font-medium text-sm text-gray-500 mt-1">Some integrations from other apps will ask you
+            for an access token.</div>
+    </div>
+
+    <form action="" method="post" class="lg:w-1/3 sm:w-2/3 w-full">
+        {% csrf_token %}
+        <div id="message-box" class="hidden mb-4">
+        </div>
+        <div>
+            <label class="font-semibold text-sm text-gray-600 pb-1 block mb-1">Enter Password</label>
+            <input type="password" id="password"
+                class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm font-light w-full" />
+        </div>
+        <div class="flex items-center justify-start my-8">
+            <button type="submit" name="tokenFormSubmit" id="tokenFormSubmit"
+                class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white px-4 py-2.5 rounded-md text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                <span class="inline-block">Generate New Token
+                    <i class="fa fa-key ml-2.5 transition-all duration-300 ease-in-out"></i>
+                </span>
+            </button>
+        </div>
+    </form>
+
+    <div class="my-6 mt-12">
+        <div class="font-roboto font-semibold text-xl">Created Token</div>
+    </div>
+    <table class="font-roboto w-full table-fixed" id="token-table">
+        <thead>
+            <tr class="font-semibold border-collapse border-b-2 border-indigo-500 text-base sm:text-lg">
+                <td class="pl-2">Token</td>
+                <td>Created On</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+        <tbody id="tokenTableBody">
+        </tbody>
+    </table>
+
+</div>
+
+
+{% include '../blocks/dismissible_alert.html' %}
+
+
+{% endblock body %}
+
+
+{% block js %}
+<script>
+
+
+    $(document).ready(function () {
+        let content = ``;
+
+        //func to copy to clipboard
+        function copyToClipboard(text) {
+            var tempInput = $("<input>"); // Create a temporary input element
+            $("body").append(tempInput); // Append it to the body element
+            tempInput.val(text).select(); // Set the value and select the text
+            document.execCommand("copy"); // Copy the selected text to the clipboard
+            tempInput.remove(); // Remove the temporary input element
+        }
+
+        //func to humanize dates
+        function humanizeDateTime(dateTimeString) {
+            const currentDate = new Date();
+            const date = new Date(dateTimeString);
+
+            const timeDiff = currentDate.getTime() - date.getTime();
+            const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Number of days difference
+
+            if (dayDiff === 0) {
+                return "today";
+            } else if (dayDiff === 1) {
+                return "yesterday";
+            } else {
+                return dayDiff + " days ago";
+            }
+        }
+
+
+        //handles token copy
+        $(document).on("click", ".copyToken", function (e) {
+            e.preventDefault();
+            var token = $(this).data("id");
+            copyToClipboard(token);
+        });
+
+        //function to load token table body
+        function loadTokenTable() {
+
+            $.ajax({
+                type: "get",
+                url: "{% url 'get-auth-tokens' %}",
+                success: function (response) {
+                    let data = response.data;
+                    let message = response.message;
+                    let error = response.error;
+                    let status = response.status;
+                    let tableData = ``;
+                    if (status == 200 && error == null) {
+                        if (message == "data fetched successfully") {
+                            tableData = ``;
+                            
+                            for (let index = data.length - 1; index >= 0; index--) {
+                                let id = data[index]["id"];
+                                let token = data[index]["token"];
+                                let created_at = data[index]["created_at"];
+
+                                tableData += `
+                                <tr class="font-light border-collapse text-xs sm:text-base">
+                                    <td class="p-2 break-words">
+                                        <span class="mr-1 text-indigo-500 cursor-pointer text-lg hover:text-indigo-700 transition"><i class="fa fa-clone copyToken" data-id="${token}"></i></span> ${token.slice(0, 6) + "........" + token.slice(-6)}
+                                    </td>
+                                    <td class="p-2 pl-0 break-words">${humanizeDateTime(created_at)}</td>
+                                    <td class="p-2 pl-0 break-words">
+                                        <button class="deleteTokenBtn py-2 px-3.5 sm:py-2.5 sm:px-4 uppercase bg-red-300 font-medium cursor-pointer hover:bg-red-400 rounded-sm w-fit transition-all duration-300 ease-in-out"
+                                            data-id="${id}">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>`;
+                            }
+                        } else if (message == "no records") {
+                            tableData = `
+                                <tr class="font-light border-collapse">
+                                    <td class="text-sm text-gray-500 pt-2">No token generated till now</td>
+                                </tr>`;
+                        }
+                    } else {
+                        tableData = `
+                            <tr class="font-light border-collapse">
+                                <td class="text-sm text-gray-500 pt-2">Could not fetch token details</td>
+                            </tr>`;
+                    }
+
+                    $("#tokenTableBody").html(tableData);
+                }
+            });
+        }
+
+        loadTokenTable();
+
+        //handles new token creation
+        $("#tokenFormSubmit").on("click", function (e) {
+            e.preventDefault();
+
+            let password = $("#password").val();
+            if (password != "") {
+                $.ajax({
+                    type: "post",
+                    url: "{% url 'create-auth-token' %}",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        pass: password,
+                    },
+                    success: function (response) {
+                        if (response.error == null && response.status == 201) {
+                            content = `
+                            <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">Token generated</span>
+                            </div>`;
+                        } else {
+                            content = `
+                            <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                                <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                                <span class="block sm:inline">${response.error}</span>
+                            </div>`;
+
+                        }
+
+                        $("#message-box").html(content);
+                        $("#message-box").css("display", "flex");
+                        setTimeout(function () {
+                            $("#message-box").css("display", "none");
+                        }, 3100);
+
+                        $("#password").val('');
+
+                        loadTokenTable();
+                    }
+
+                });
+
+            } else {
+                content = `
+                <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative w-full" role="alert">
+                    <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                    <span class="block sm:inline">Password is required</span>
+                </div>`;
+                $("#message-box").css("display", "flex");
+                $("#message-box").html(content);
+
+            }
+
+
+        });
+
+
+        $(document).on("click", ".deleteTokenBtn", function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: "get",
+                url: "{% url 'delete-auth-token' %}",
+                data: {
+                    id: $(this).data("id"),
+                },
+                success: function (response) {
+                    loadTokenTable();
+                }
+            });
+        })
+
+
+    });
+
+
+</script>
+{% endblock js %}

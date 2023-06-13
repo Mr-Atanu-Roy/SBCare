@@ -47,10 +47,10 @@ INSTALLED_APPS = [
     
     #third-party
     'rest_framework',
-    'rest_framework.authtoken',
     
     #own
     'accounts',
+    'pricing',
     'products',
     
     'url_short_api',

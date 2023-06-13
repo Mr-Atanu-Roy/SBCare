@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<div class="hidden relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal-container">
+<div class="hidden relative" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal-container" style="z-index: 999999999999999999;">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -123,7 +123,7 @@
                     let status = response.status;
 
                     let content = ``;
-                    if (data != null && message == "data fetched successfully") {
+                    if (data != null && message == "data fetched successfully" && status == 200) {
                         for (let index = data.length - 1; index >= 0; index--) {
                             let id = data[index]["id"];
                             let title = data[index]["title"] == null || data[index]["title"] == "" ? "" : data[index]["title"].length > 26 ? data[index]["title"].slice(0, 26) + "....  " : data[index]["title"]+"  ";
@@ -134,9 +134,13 @@
                             content += `
                             <div class="url-box w-full flex-col justify-start items-center">
                                 <div class="flex border mb-4 py-5 px-4 rounded hover:bg-gray-50 w-full 2xl:w-10/12">
-
                                     <div class="flex-col items-center justify-between mr-6">
-                                        <button type="submit" class="p-0.5 delete-url-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 cursor-pointer"></i></button>
+                                        <div>
+                                            <button type="submit" class="p-0.5"> <i class="copyURL fa fa-clone text-indigo-500 cursor-pointer text-lg hover:text-indigo-700 transition" data-id="${short_url}"></i></button>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="p-0.5 delete-url-btn" data-id="${id}"> <i class="fa fa-trash text-red-700 hover:text-red-800 transition cursor-pointer"></i></button>
+                                        </div>
                                     </div>
                                     <div>
                                         <div class="text-xs font-roboto font-extralight mb-1.5">
@@ -157,8 +161,14 @@
                                 </div>
                             </div>`
                         }
-                    } else if (data == null && message == "no records") {
-                        content = `<p class="font-roboto font-light">No URLs created till now</p>`;
+                    } else if (data == null && message != null) {
+                        if(message == "no records"){
+                            content = `<p class="font-roboto font-light text-gray-500 text-sm">No URLs created till now</p>`;
+                        }else{
+                            content = `<p class="font-roboto font-light text-gray-500 text-sm">${message}</p>`;
+                        }
+                    }else if (error != null){
+                        content = `<p class="font-roboto font-light text-gray-500 text-sm">${error}</p>`;
                     }
                     $("#url-box-container").html(content);
                 }
@@ -167,7 +177,7 @@
 
         loadCreatedURLS();
 
-        //handels creation of new URL
+        //handles creation of new URL
         $("#create-url-submit").click(function (e) {
             e.preventDefault();
             $.ajax({
@@ -184,7 +194,7 @@
                     let error = response.error;
                     let status = response.status;
 
-                    if (error == null && message == "URL created successfully") {
+                    if (error == null && message == "URL created successfully" && status == 201) {
                         $("#message-box").css("display", "none");
                         $("#modal-container").css("display", "block");
                         $("#modal-link").html(data);
@@ -195,11 +205,15 @@
                         <div class="alert-success font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
                             <span class="block sm:inline">${message}</span>
-                            </div>`;
+                        </div>`;
+                        
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
 
-                    } else {
+                        $("#title").val('');
+                        $("#dest").val('');
+
+                    } else if(message == null) {
                         let message_block = `
                         <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
                             <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
@@ -207,8 +221,17 @@
                         </div>`;
                         $("#message-box").css("display", "block");
                         $("#message-box").html(message_block);
-                    }
+                    }else{
+                        let message_block = `
+                        <div class="alert-error font-roboto font-medium px-4 py-3 my-3 rounded relative" role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">${message}</span>
+                        </div>`;
+                        $("#message-box").css("display", "block");
+                        $("#message-box").html(message_block);
 
+                    }
+                    
                     loadCreatedURLS();
 
                 }
@@ -216,7 +239,7 @@
 
         });
 
-        //handels deletion of URL
+        //handles deletion of URL
         $(document).on("click", ".delete-url-btn", function (e) {
             e.preventDefault();
             $.ajax({
@@ -230,13 +253,9 @@
                     let error = response.error;
                     let status = response.status;
                     loadCreatedURLS();
-                    // if (error == null && message == "deleted successfully") {
-                    // }else{
-                    //     // alert(message+" Reload page to see changes");
-                    //     alert(error);
-                    // }
-
-
+                    if (message != null) {
+                        alert(message);
+                    }
                 }
             });
 
@@ -254,6 +273,13 @@
             copyToClipboard(link);
 
             $("#modal-link-copy").html('Copied')
+        });
+
+        //handles qr link copy from list
+        $(document).on("click", ".copyURL", function (e) {
+            e.preventDefault();
+            var link = $(this).data("id");
+            copyToClipboard(link);
         });
 
     });

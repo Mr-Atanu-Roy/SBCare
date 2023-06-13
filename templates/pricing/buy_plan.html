@@ -1,0 +1,212 @@
+{% extends '../blocks/base1.html' %}
+
+{% block title %}SB Care | Buy Plan{% endblock title %}
+
+{% block styles %}
+<style>
+    header {
+        display: none !important;
+    }
+</style>
+{% endblock styles %}
+
+{% block body %}
+
+
+<section id="buy_plan" class="min-h-screen w-full bg-gray-100">
+    <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 w-full h-full p-10 px-6 xs:px-10">
+        <div class="border p-6 rounded-lg font-roboto bg-white mb-8 sm:mb-12 lg:mb-0 xs:p-10 sm:p-12" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% if messages %}
+
+                {% for message in messages %}
+                <div class="{% if message.tags %}{{message.tags}}{% endif %} font-roboto font-medium px-4 py-3 rounded relative mb-3"
+                    role="alert">
+                    <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                    <span class="block sm:inline">{{message}}</span>
+                </div>
+                {% endfor %}
+
+                {% endif %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
+                    <div>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Plan</label>
+                        <select id="plan" name="plan"
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light font-roboto mt-1 mb-5">
+                            <option value="free" class="uppercase" {% if user_plan == 'free' %} selected {% endif %}>FREE
+                            </option>
+                            <option value="pro" class="uppercase" {% if user_plan == 'pro' %} selected {% endif %}>PRO
+                            </option>
+                            <option value="business" class="uppercase" {% if user_plan == 'business' %} selected {% endif %}>
+                                BUSINESS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Bill For</label>
+                        <select id="billFor" name="billFor"
+                            class="border outline-none hover:border-indigo-600 focus:border-indigo-600 rounded px-3 py-2 text-sm w-full font-light font-roboto mt-1 mb-5">
+                            <option value="1" class="capitalize">1 Month</option>
+                            <option value="3" class="capitalize">3 Month</option>
+                            <option value="6" class="capitalize">6 Month</option>
+                            <option value="12" class="capitalize">1 Year</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Name</label>
+                    <input type="text" value="{{user.first_name}} {{user.last_name}}"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light cursor-not-allowed"
+                        disabled />
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">E-mail</label>
+                    <input type="text" value="{{user.email}}"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light cursor-not-allowed"
+                        disabled />
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-gray-600 pb-1 block font-roboto">Phone</label>
+                    <input type="text" value="" name="phone"
+                        class="border outline-none rounded px-3 py-2 mt-1 mb-5 text-sm w-full font-roboto font-light hover:border-indigo-600 focus:border-indigo-600" />
+                </div>
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between">
+                    <div class="flex items-center mb-1.5 xl:m-0">
+                        <input type="checkbox" name="email_check" id="email_check" checked>
+                        <label for="email_check" class="text-sm ml-2 cursor-pointer">Receive Email Confirmation</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" name="phone_check" id="phone_check">
+                        <label for="phone_check" class="text-sm ml-2 cursor-pointer">Receive Phone Confirmation</label>
+                    </div>
+
+                </div>
+                <div class="mt-8">
+                    <button type="submit"
+                        class="foont-roboto transition duration-200 bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-700 focus:shadow-sm focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                        <span class="inline-block mr-2">Proceed to Pay</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="w-4 h-4 inline-block">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="border p-6 rounded-lg bg-white xs:p-10 sm:p-12" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" id="orderSummery">
+            <div class="mb-3 font-roboto">
+                <p class="font-semibold text-gray-500 xs:text-lg">Order Summery</p>
+                <p class="font-light text-sm mt-2 mb-1 text-gray-500">The total cost include all taxes also</p>
+                <hr>
+                <div class="xs:text-lg mt-7">
+                    <div class="grid grid-cols-4">
+                        <div class="col-span-3">
+                            <p class="mb-1">Plan Name</p>
+                            <p class="mb-1">Validity</p>
+                            <p class="mb-1">Expires On</p>
+                            <p class="mb-1">Base Price</p>
+                            <p class="mb-1">Tax</p>
+                            <p class="mb-1">Discount</p>
+                        </div>
+                        <div class="col-span-1 justify-self-end">
+                            <p class="text-right mb-1 uppercase" id="planName">Free</p>
+                            <p class="text-right mb-1">30 days</p>
+                            <p class="text-right mb-1" id="expiresOn">00-00</p>
+                            <p class="text-right mb-1">&#8377;<span id="basePrice">0</span></p>
+                            <p class="text-right mb-1">18%</p>
+                            <p class="text-right mb-1"><span id="discount"></span>%</p>
+                        </div>
+                    </div>
+                    <hr class="my-1.5">
+                    <div class="grid grid-cols-4">
+                        <div class="col-span-3">
+                            <p class="mb-1">Total Price</p>
+                        </div>
+                        <div class="col-span-1 justify-self-end">
+                            <p class="text-right mb-1 text-2xl xs:text-3xl font-bold text-indigo-700">&#8377;<span id="totalPrice">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <p class="text-gray-500 mb-2.5 text-sm xs:text-base">
+                        What you are getting
+                    </p>
+                    <div>
+                        <div class="grid grid-cols-4 text-xs xs:text-sm" id="planINFO">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        //func to load plan info
+        function loadPlanINFO(){
+            let plan = $("#plan").val();
+            let billFor = $("#billFor").val();
+            $.ajax({
+                type: "get",
+                url: "{% url 'get_plan_info' %}",
+                data: {
+                    "plan": plan, 
+                    "bill_for": billFor
+                }, 
+                success: function (response) {
+                   status = response.status;
+                   data = response.plan_data;
+                   if(status == 200){
+                        let base_price = data["amount"];
+                        let total_amount = data["total_amount"];
+                        let discount = data["discount"];
+                        let expires_on =  plan == "free" ? "Never" : data["expires_on"];;
+                        
+                        $("#planName").html(plan);
+                        $("#basePrice").html(base_price);
+                        $("#totalPrice").html(total_amount);
+                        $("#discount").html(discount);
+                        $("#expiresOn").html(expires_on);
+
+                        let content = `
+                        <div class="col-span-3">
+                            <p class="mb-1"><i class="fa fa-link text-indigo-600"></i> Create Short URL</p>
+                            <p class="mb-1"><i class="fa fa-qrcode text-indigo-600"></i> Create QR Code</p>
+                            <p class="mb-1"><i class="fa fa-share-square text-indigo-600"></i> API Requests</p>
+                        </div>
+                        <div class="col-span-1 justify-self-end">
+                            <p class="text-right mb-1">${data["url_day"]}/Day</p>
+                            <p class="text-right mb-1">${data["qr_day"]}/Day</p>
+                            <p class="text-right mb-1">${data["api_day"]}/Day</p>
+                        </div>
+                        `
+
+                        $("#planINFO").html(content);
+                   }else{
+                    $("#orderSummery").html(`<p class="text-gray-500 font-roboto text-base">Unable to fetch plan selected plan info. PLease try after some time</p>`)
+                   }
+                }
+            });
+        }
+
+        loadPlanINFO();
+        
+        $("#plan").on("change", function () {
+            loadPlanINFO();
+        });
+        $("#billFor").on("change", function () {
+            loadPlanINFO();
+        });
+
+    });
+
+</script>
+
+{% endblock body %}

@@ -3,7 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
-from accounts.models import BaseModel, SoftModel, User
+from accounts.models import User
+from accounts.utils import BaseModel, SoftModel
 from .utils import generate_random_string
 
 

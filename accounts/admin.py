@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from rest_framework.authtoken.models import Token
-
-from .models import User, UserProfile, OTP
+from accounts.models import User, UserProfile, OTP, UserToken, PaymentsHistory
 from url_short_api.models import ShortURL
 from qr_code_api.models import QRCode
 
@@ -14,8 +12,8 @@ class OTPInline(admin.StackedInline):
     extra = 0
     classes = ['collapse']
     
-class TokenInline(admin.StackedInline):
-    model = Token
+class UserTokenInline(admin.StackedInline):
+    model = UserToken
     extra = 0
     classes = ['collapse']
     
@@ -32,6 +30,7 @@ class QRCodeInline(admin.TabularInline):
     model = QRCode
     extra = 0
     classes = ['collapse']
+
 
     
 class UserAdmin(admin.ModelAdmin):
@@ -54,22 +53,30 @@ class UserAdmin(admin.ModelAdmin):
         }),
     ]
     
-    inlines = [UserProfileInline, OTPInline, TokenInline, ShortURLInline, QRCodeInline]
+    inlines = [UserProfileInline, OTPInline, UserTokenInline, ShortURLInline, QRCodeInline]
+  
     
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'api_access', 'coins', 'gender', 'country', 'city')
+    list_display = ('id', 'user', 'api_access', 'gender', 'country', 'city')
     fieldsets = [
         ("User Details", {
             "fields": (
-                ['api_access', 'coins', 'gender', 'dob']
+                ['gender', 'dob']
             ),
         }),
-        ("Residentialgol Details", {
+        ("Residential Details", {
             "fields": (
                 ['country', 'city', 'address1', 'address2']
             )
         }),
+        ("Product Details", {
+            "fields": (
+                ['api_access', 'plan', 'last_paid', 'plan_expires']
+            )
+        }), 
     ]
+
+    
     
 class OTPAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'otp', 'purpose', 'is_used', 'created_at')
@@ -80,9 +87,44 @@ class OTPAdmin(admin.ModelAdmin):
             ),
         }),
     ]
+    
+    ordering = ['-created_at']
+    
+    
+class UserTokenAdmin(admin.ModelAdmin):
+    list_display = ('user', 'token', 'role', 'created_at')
+    fieldsets = [
+        ("Token Details", {
+            "fields": (
+                ['user', 'role']
+            ),
+        }),
+    ]
+    
+    ordering = ['-created_at']
+
+    
+class PaymentsHistoryAdmin(admin.ModelAdmin):
+    list_display = ('payment_id', 'user', 'amount', 'is_paid', 'created_at')
+    fieldsets = [
+        ("Payment Details", {
+            "fields": (
+                ['user', 'plan', 'is_paid', 'purpose', 'amount', 'currency', 'phone', 'billed_for']
+            ),
+        }),
+        ("More Details", {
+            "fields": (
+                ['payment_request_id', 'order_id', 'payment_status', 'payment_mode']
+            ),'classes': ['collapse']
+        }),
+    ]
+
+    ordering = ['-created_at']
+
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(OTP, OTPAdmin)
-
+admin.site.register(UserToken, UserTokenAdmin)
+admin.site.register(PaymentsHistory, PaymentsHistoryAdmin)

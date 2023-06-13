@@ -1,14 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import User, OTP, UserProfile
-from .utils import current_time, check_str_special
+from accounts.models import User, OTP, UserProfile, UserToken
+from accounts.utils import current_time, check_str_special
+
+import requests
+from requests.auth import HTTPBasicAuth
+
 
 # Create your views here.
 def signup(request):
@@ -150,6 +156,13 @@ def profile(request):
         pass
     return render(request, 'accounts/profile.html', context)
 
+
+
+@login_required(login_url="/auth/login")
+def dev_settings(request):
+    
+
+    return render(request, './accounts/dev_settings.html')
 
 
 def email_verify(request):
@@ -301,7 +314,6 @@ def reset_password_link(request, token):
 
 
 #ajax calls
-
 @login_required(login_url="/auth/login")
 def submit_profile_form(request):
     try:
@@ -350,5 +362,148 @@ def submit_profile_form(request):
         return JsonResponse(response)
         
     except Exception as e:
+        pass
+
+
+@login_required(login_url="/auth/login")
+def get_authtoken(request):
+    try:
+        ret_res = {
+            "data": None,
+            "error": None,
+            "status": None
+        }
+        if request.method == "GET":
+            ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
+
+            if ACCESS_TOKEN:
+                headers = {
+                    "Authorization": f"Token {ACCESS_TOKEN}",
+                    "Content-Type": "application/json"
+                }
+                
+                url = f"{settings.BASE_URL}auth/api/generate-authtoken/"
+                # Send the POST request
+                response = requests.get(url, headers=headers)
+                res_json = response.json()
+                
+                if response.status_code == 200:                            
+                    ret_res["data"] = res_json["data"]
+                    ret_res["message"] = res_json["message"]
+                    ret_res["status"] = response.status_code
+                
+                else:                        
+                    ret_res["error"] = res_json["message"]
+                    ret_res["status"] = response.status_code    
+                    
+            else:
+                ret_res["error"] = "Invalid request"     
+            
+            return JsonResponse(ret_res)
+        
+        else:
+        
+            return JsonResponse("Invalid request")
+        
+    except Exception as e:
+        print(e)
+        pass
+
+
+
+@login_required(login_url="/auth/login")
+def create_authtoken(request):
+    try:
+        ret_res = {
+            "data": None,
+            "error": None,
+            "status": None
+        }
+        if request.method == "POST":
+            username = request.user.email
+            password = request.POST.get("pass")
+            
+            if username and password:
+                #check if given password is correct
+                if auth.authenticate(email = username, password = password):
+                
+                    url = f"{settings.BASE_URL}auth/api/generate-authtoken/"
+                    # Send the POST request
+                    response = requests.post(url, auth=HTTPBasicAuth(username, password))
+                    res_json = response.json()
+
+                    if response.status_code == 201:                            
+                        ret_res["data"] = res_json["token"]
+                        ret_res["status"] = response.status_code
+                    
+                    else:                        
+                        ret_res["error"] = res_json["message"]
+                        ret_res["status"] = response.status_code  
+                        
+                else:  
+                    ret_res["error"] = "Invalid password"     
+
+            else:
+                ret_res["error"] = "Password is required"     
+            
+            return JsonResponse(ret_res)
+        
+        else:
+        
+            return JsonResponse("Invalid request")
+        
+    except Exception as e:
+        print(e)
+        pass
+    
+
+@login_required(login_url="/auth/login")
+def delete_authtoken(request):
+    try:
+        ret_res = {
+            "message": None,
+            "error": None,
+            "status": None
+        }
+        if request.method == "GET":
+            id = request.GET.get("id")
+            if id:
+                ACCESS_TOKEN = UserToken.objects.filter(user=request.user, role="app-use").first()
+                try:
+                    if ACCESS_TOKEN:
+                        
+                        headers = {
+                            "Authorization": f"Token {ACCESS_TOKEN}",
+                            "Content-Type": "application/json"
+                        }
+                        
+                        url = f"{settings.BASE_URL}auth/api/delete-authtoken/{id}"
+                        
+                        # Send the DELETE request
+                        response = requests.delete(url, headers=headers)
+                        res_json = response.json()
+                        print(res_json)
+                        if response.status_code == 204:                           
+                            ret_res["data"] = res_json["data"]
+                            ret_res["message"] = res_json["message"]
+                            ret_res["status"] = response.status_code
+                        
+                        else:
+                            ret_res["error"] = res_json["detail"]
+                            ret_res["status"] = response.status_code
+                        
+                    else:
+                        ret_res["error"] = "Invalid request"  
+                except Exception as e:
+                    pass           
+
+        
+            return JsonResponse(ret_res, safe=False)
+        
+        else:
+            return JsonResponse("Invalid request")
+    
+    except Exception as e:
+        # print(e)
         pass
 
