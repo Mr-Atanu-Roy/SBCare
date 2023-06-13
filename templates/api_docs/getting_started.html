@@ -1,0 +1,147 @@
+{% extends '../blocks/api_docs_base.html' %}
+
+{% block title %} API Documentation | SB Care {% endblock title %}
+
+
+
+
+{% block body %}
+
+<div class="font-roboto">
+
+    <div id="getting-started">
+        <h2 class="text-3xl font-semibold mb-8 capitalize">Get started with our API</h2>
+
+        <p>
+            With our API you can programmatically create short urls, qr codes, allowing developers to build their own
+            applications and more.
+        </p>
+        <p class="mt-3">
+            To use the SB Care API, you need to create an account. What you can do with the API depends on what level of
+            <a href="{% url 'pricing' %}" class="text-indigo-700 italic hover:underline">SB Care plan</a> you have. Once
+            you have an account and are logged in, you can get an API key and begin making calls to the API.
+        </p>
+    </div>
+    
+    <div class="my-12" id="prerequisites">
+        <h2 class="text-2xl font-semibold mb-8 capitalize">Prerequisites</h2>
+
+        <ol class="pl-5">
+            <li class="list-disc">You need a SB Care account.</li>
+            <li class="list-disc">Get a access token from <a href="{% url 'dev-settings' %}"
+                    class="text-indigo-700 italic hover:underline">developer settings section</a> of your dashboard. You
+                can also get the access token by <a href="{% url 'access-tokens' %}#get-access_token"
+                    class="text-indigo-700 italic hover:underline">sending an API request</a>.</li>
+            <li class="list-disc">You have to wait until we give access your account permission to access our API.</li>
+        </ol>
+
+    </div>
+
+    <div id="access-tokens" class="pt-10">
+        <h2 class="text-3xl font-semibold capitalize mb-6">Access Tokens</h2>
+
+        <p>
+            The access token is a string which contains the credentials and permissions that can be used to access a given resource (e.g get all created urls, qr codes or create urls or qr codes). An access token is required each time you send request to our API endpoints
+        </p>
+
+        <p class="mt-5">
+            To use the access token you must include the following header in your API calls:
+        </p>
+        <table class="font-roboto w-full table-fixed mt-6">
+            <thead>
+                <tr class="font-semibold border-collapse border-b-2 border-indigo-500 text-base sm:text-lg">
+                    <td>Header Parameter</td>
+                    <td>Value</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="font-light border-collapse text-sm sm:text-base">
+                    <td class="pt-5">Authorization</td>
+                    <td class="pt-5"><span class="italic">Required</span> A valid access token in the following format: Token &ltAccess Token&gt </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <p class="text-sm mt-6">The following example uses cURL to retrieve information about created qr codes:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <p class="header-item"><span style="text-transform: none;">OAuth 2.0</span> authentication</p>
+                    <p class="header-item">bash</p>
+                </div>
+                <div class="code-body">
+                    <p class="command"><span class="green">curl</span> --request GET \</p>
+                    <p class="command">--url <span class="yellow">'{{BASE_URL}}q/api/qr-code/'</span> \</p>
+                    <p class="command">--header <span class="yellow">"Authorization: Token &lttoken&gt"</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="authentication" class="pt-10">
+        <h2 class="text-3xl font-semibold capitalize mb-6">Authentication</h2>
+
+        <p>
+            To access out API you must authenticate using a token(OAuth 2.0 auth). You can learn more about access tokens from <a href="{% url 'access-tokens' %}" class="text-indigo-600 italic hover:underline">here</a>.
+        </p>
+
+        <p class="mt-3.5">
+            All our API endpoints accepts only OAuth 2.0 Authentication. But the <a href="{% url 'access-tokens' %}#get-access-token" class="capitalize italic text-indigo-600">get access token</a> and <a href="{% url 'access-tokens' %}#generate-access-token" class="capitalize italic text-indigo-600">generate access token</a> endpoints can be accessed by HTTP Basic Authentication also.
+        </p>
+
+        <div class="my-8">
+            <h3 class="text-lg font-semibold mb-1.5">OAuth 2.0 Authentication</h3>
+            <p class="text-sm">The following example uses cURL to retrieve information about created qr codes using OAuth 2.0:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <p class="header-item"><span style="text-transform: none;">OAuth 2.0</span> Auth</p>
+                    <p class="header-item">bash</p>
+                </div>
+                <div class="code-body">
+                    <p class="command"><span class="green">curl</span> --request GET \</p>
+                    <p class="command">--url <span class="yellow">'{{BASE_URL}}q/api/qr-code/'</span> \</p>
+                    <p class="command">--header <span class="yellow">"Authorization: Token &lttoken&gt"</span></p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-semibold mb-1.5">HTTP Basic Authentication</h3>
+            <p class="text-sm">The following example uses cURL to retrieve information about created tokens using Basic Authentication:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <p class="header-item">HTTP Basic Auth</p>
+                    <p class="header-item">bash</p>
+                </div>
+                <div class="code-body">
+                    <p class="command"><span class="green">curl</span> --request GET \</p>
+                    <p class="command">--url <span class="yellow">'{{BASE_URL}}auth/api/generate-authtoken/'</span> \</p>
+                    <p class="command">--header <span class="yellow">'&ltemail&gt:&ltpassword&gt'</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rate-limit" class="pt-10">
+        <h2 class="text-3xl font-semibold capitalize mb-6">Rate limit</h2>
+
+        <p>
+            With our <a href="{% url 'pricing' %}" class="italic text-indigo-600 hover:underline">SBCare API plans</a> you can see the limitations of API usages based on per day. If you need to perform more API request per day then you have to upgrade your plan.
+        </p>
+        <p class="mt-2">You can encounter a following message(error) with error code <span class="text-teal-700 font-bold">429</span> if your daily quota has finished: </p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <p class="header-item">Throttle Error</p>
+                <p class="header-item">json</p>
+            </div>
+            <div class="code-body">
+                <p class="command">{</p>
+                <p class="command"><span class="green">"message"</span>: <span class="yellow">"Request was throttled."</span></p>
+                <p class="command">}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}

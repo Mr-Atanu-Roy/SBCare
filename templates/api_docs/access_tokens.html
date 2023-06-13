@@ -1,0 +1,182 @@
+{% extends '../blocks/api_docs_base.html' %}
+
+{% block title %} API Docs Reference-Access Tokens | SB Care {% endblock title %}
+
+
+
+
+{% block body %}
+
+<div class="font-roboto">
+
+    <div id="get-access-token">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Get Your Access Token</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0/Basic Auth</span>
+            </div>
+        </div>
+        <div class="flex mt-1.5 mb-6">
+            <p class="text-teal-700 mr-3 font-bold">GET</p>
+            <p class="text-yellow-800 font-semibold">/auth/api/generate-authtoken/</p>
+        </div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can get all your created access token by OAuth 2.0 Auth (Basic Auth can also be used):</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">get access token</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request GET \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}auth/api/generate-authtoken/'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">200</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: [</p>
+                                <div class="pl-8">
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">8</span>,</p>
+                                    <p class="command"><span class="green">"token"</span>: <span class="yellow">"450bd7b.....718bd5"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">},</p>
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"token"</span>: <span class="yellow">9</span>,</p>
+                                    <p class="command"><span class="green">"token"</span>: <span class="yellow">"380bd7af.....7145d5"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">},</p>
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">12</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5">],</p>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"data fetched successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12" id="generate-access-token">
+        <h2 class="text-2xl font-semibold capitalize">Generate Access Token</h2>
+        <div>
+            <p class="font-light text-sm mb-1.5">You can get your access token by 2 methods:</p>
+            <ol class="pl-6">
+                <li class="list-disc">From <a href="{% url 'dev-settings' %}" class="italic text-indigo-600 hover:underline">developer settings section</a> in your dashboard</li>
+                <li class="list-disc">By sending API request as shown below</li>
+            </ol>
+        </div>
+
+        <div id="get-access-token" class="mt-6">
+            <div class="flex items-center justify-start">
+                <h2 class="text-xl font-semibold capitalize">Get Access Token <span class="text-sm font-light normal-case">by
+                    sending API request</span></h2>
+                <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                    <i class="fa fa-lock mr-1"></i>
+                    <span>Basic Auth</span>
+                </div>
+            </div>
+            <div class="flex mt-1.5 mb-6">
+                <p class="text-teal-700 mr-3 font-bold uppercase">POST</p>
+                <p class="text-yellow-800 font-semibold">/auth/api/generate-authtoken/</p>
+            </div>
+
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can get your access token by send an API request:</p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Generate Access Token</p>
+                            <p class="header-item">bash</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command"><span class="green">curl</span> --request POST \</p>
+                            <p class="command">--url <span class="yellow">'{{BASE_URL}}auth/api/generate-authtoken/'</span> \</p>
+                            <p class="command">--user <span class="yellow">'YOUR_EMAIL:YOUR_PASSWORD'</span></p>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Sample Responses</p>
+                            <p class="header-item">json</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command">{</p>
+                            <p class="command"><span class="green">"token"</span>: <span class="yellow">"330bd7af.....718bd5"</span>,</p>
+                            <p class="command"><span class="green">"error"</span>: <span class="yellow">null</span></p>
+                            <p class="command">}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 mb-4" id="delete-access-token" >
+        <div id="get-access-token" class="mt-6">
+            <div class="flex items-center justify-start">
+                <h2 class="text-xl font-semibold capitalize">Delete Access Token</h2>
+                <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                    <i class="fa fa-lock mr-1"></i>
+                    <span>OAuth 2.0</span>
+                </div>
+            </div>
+            <div class="flex mt-1.5 mb-6">
+                <p class="text-teal-700 mr-3 font-bold uppercase">DELETE</p>
+                <p class="text-yellow-800 font-semibold">/auth/api/delete-authtoken/&ltid&gt</p>
+            </div>
+
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can delete a access token by send an API request:</p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Delete Access Token</p>
+                            <p class="header-item">bash</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command"><span class="green">curl</span> --request DELETE \</p>
+                            <p class="command">--url <span class="yellow">'{{BASE_URL}}auth/api/delete-authtoken/12'</span> \</p>
+                            <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Sample Responses</p>
+                            <p class="header-item">json</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command">{</p>
+                            <p class="command"><span class="green">"status"</span>: <span class="yellow">204</span>,</p>
+                            <p class="command"><span class="green">"date"</span>: <span class="yellow">null</span></p>
+                            <p class="command"><span class="green">"message"</span>: <span class="yellow">"deleted successfully"</span></p>
+                            <p class="command">}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}

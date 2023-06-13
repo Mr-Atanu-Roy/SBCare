@@ -31,6 +31,8 @@ urlpatterns = [
     
     path("r/", include("url_short_api.urls")),
     path("q/", include("qr_code_api.urls")),
+    
+    path("api/docs/v1/", include("api_docs.urls")),
 ]
 
 

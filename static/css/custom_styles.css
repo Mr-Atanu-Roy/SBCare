@@ -1,3 +1,11 @@
+/* cascadia code font  */
+@font-face {
+  font-family: 'cascadia-code';
+  src: url('/static/fonts/CascadiaCode-Regular-VTT.ttf');
+}
+
+
+/* header  */
 .header-links li span {
   position: relative;
   z-index: 0;
@@ -14,6 +22,7 @@
   height: 6px;
 }
 
+/* alert elements */
 .alert-success {
   background-color: rgb(204, 251, 241) !important;
   color: rgb(19, 78, 74) !important;
@@ -30,3 +39,41 @@
   background-color: rgb(254, 226, 226) !important;
   color: rgb(185, 28, 28) !important;
 }
+
+
+/* code snippets  */
+.code-container{
+  border-radius: 0.25rem;
+  background-color: rgb(25,51,59);
+  color: white;
+  margin: 1.8rem 0;
+  font-size: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.code-container .code-header{
+  border-bottom: 1.5px solid gray;
+  padding: 1rem 1.5rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgb(164, 164, 164);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.code-container .code-body{
+  padding: 2.1rem 1.6rem;
+}
+.code-container .code-body .command{
+  margin: 0.15rem;
+  font-family: cascadia-code;
+}
+
+.code-container .yellow{
+  color: rgb(244, 145, 16) !important;
+}
+.code-container .green{
+  color: rgb(7, 225, 193) !important;
+}
+
