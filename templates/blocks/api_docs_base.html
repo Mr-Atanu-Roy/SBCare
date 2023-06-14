@@ -64,12 +64,18 @@
                             <li class="my-1 hover:text-indigo-700"><a href="{% url 'access-tokens' %}#get-access-token">Get Access Token</a></li>
                             <li class="my-1 hover:text-indigo-700"><a href="{% url 'access-tokens' %}#generate-access-token">Create Access Token</a></li>
                             <li class="my-1 hover:text-indigo-700"><a href="{% url 'access-tokens' %}#delete-access-token">Delete Access Token</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Get Short URLs</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Creating Short URLs</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Delete URLs</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Get QR Codes</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Create QR Codes</a></li>
-                            <li class="my-1 hover:text-indigo-700"><a href="">Delete QR Codes</a></li>
+
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'short-urls' %}#get-all-short-urls">Get All Short URLs</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'short-urls' %}#get-single-short-urls">Get Single Short URLs</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'short-urls' %}#update-short-urls">Update A Short URLs</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'short-urls' %}#create-short-urls">Creating Short URLs</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'short-urls' %}#delete-short-urls">Delete URLs</a></li>
+
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'qr-codes' %}#get-all-qr-codes">Get All QR Codes</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'qr-codes' %}#get-single-qr-codes">Get Single QR Codes</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'qr-codes' %}#update-qr-codes">Update A QR Codes</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'qr-codes' %}#create-qr-codes">Create QR Codes</a></li>
+                            <li class="my-1 hover:text-indigo-700"><a href="{% url 'qr-codes' %}#delete-qr-codes">Delete QR Codes</a></li>
                         </ul>
                     </li>                                 
                 </ul>

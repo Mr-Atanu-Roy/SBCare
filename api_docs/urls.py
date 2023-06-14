@@ -4,6 +4,8 @@ from .views import *
 
 urlpatterns = [
     path("", getting_started, name="getting-started"),
-    path("what-is-access-tokens", access_tokens, name="access-tokens"),
-
+    path("access-tokens", access_tokens, name="access-tokens"),
+    path("short-urls", short_urls, name="short-urls"),
+    path("qr-codes", qr_codes, name="qr-codes"),
+    
 ]
