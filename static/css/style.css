@@ -2404,6 +2404,10 @@ video {
     width: 75%;
   }
 
+  .md\:w-2\/5{
+    width: 40%;
+  }
+
   .md\:max-w-full{
     max-width: 100%;
   }

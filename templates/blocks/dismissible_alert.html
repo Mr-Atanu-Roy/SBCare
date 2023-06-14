@@ -1,7 +1,7 @@
 {% if messages %}
     {% for message in messages %}
     <div id="alert-box"
-        class="{% if message.tags %}{{message.tags}}{% endif %} border px-4 py-3 fixed top-20 right-8 rounded-lg w-2/5" role="alert" style="z-index: 99999999999999;">
+        class="{% if message.tags %}{{message.tags}}{% endif %} border px-4 py-3 fixed top-20 right-8 rounded-lg w-4/5 md:w-2/5" role="alert" style="z-index: 99999999999999;">
         <strong class="capitalize block sm:inline"><i class="fa fa-exclamation-triangle"></i> {{message}}</strong>
         <span class="absolute top-0 bottom-0 right-2 px-4 py-3" id="closeAlertBtn">
             <svg class="fill-current h-6 w-6 {% if message.tags %}{{message.tags}}{% endif %}" role="button"
