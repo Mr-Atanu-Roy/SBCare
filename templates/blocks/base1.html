@@ -30,6 +30,19 @@
 
     {% endblock body %}
 
+    <script>
+        let openHeader=document.getElementById("header-open");
+        let closeHeader=document.getElementById("header-close");
+        let header=document.getElementById("header");
+
+        openHeader.addEventListener('click', function() {
+            header.classList.remove('-left-full');
+        });
+        closeHeader.addEventListener('click', function() {
+            header.classList.add('-left-full');
+        });
+    </script>
+
 </body>
 
 </html>

@@ -1,36 +1,39 @@
-<header class="bg-white shadow-lg h-20 hidden md:flex w-full sticky top-0 left-0 z-50">
+<header class="bg-white shadow-lg h-screen fixed flex flex-col w-full xs:w-10/12 top-0 -left-full z-50 items-center justify-evenly p-1.5 py-4 md:p-1.5 md:flex-row md:w-full md:sticky md:h-20 md:left-0" id="header">
     <div id="logo"
         class="transform -rotate-6 flex-shrink-0 flex-col items-center justify-center px-4 lg:px-6 xl:px-8 py-1.5">
-        <a href="{% url 'home' %}" class="text-5xl font-pacifico text-indigo-600">sb care</a>
+        <a href="{% url 'home' %}" class="text-7xl font-pacifico text-indigo-600 md:text-5xl">sb care</a>
         <div class="w-3/4 h-1 bg-indigo-700 rounded-md"></div>
     </div>
+    <div class="text-3xl absolute top-4 right-4 cursor-pointer z-50 md:hidden" id="header-close">
+        <i class="fa fa-times"></i>
+    </div>
     <nav class="header-links contents font-semibold text-base lg:text-lg font-roboto">
-        <ul class="flex items-center ml-4 xl:ml-8 mr-auto">
-            <li class="p-3 xl:p-6 active">
+        <ul class="flex flex-col text-xl w-full items-center ml-4 xl:ml-8 mr-auto md:text-base md:flex-row">
+            <li class="p-3 py-6 md:p-3 xl:p-6 active">
                 <a href="{% url 'home' %}">
                     <span>Home</span>
                 </a>
             </li>
-            <li class="p-3 xl:p-6">
+            <li class="p-3 py-6 md:p-3 xl:p-6">
                 <a href="{% url 'url_shorter' %}">
                     <span>Products</span>
                 </a>
             </li>
             {% if user.is_authenticated %}
-            <li class="p-3 xl:p-6">
+            <li class="p-3 py-6 md:p-3 xl:p-6">
                 <a href="{% url 'profile' %}">
                     <span>Dashboard</span>
                 </a>
             </li>
             {% endif %}
-            <li class="p-3 xl:p-6 active">
+            <li class="p-3 py-6 md:p-3 xl:p-6 active">
                 <a href="{% url 'pricing' %}">
                     <span>Pricing</span>
                 </a>
             </li>
         </ul>
     </nav>
-    <div class="flex items-center px-4 lg:px-6 xl:px-8">
+    <div class="flex items-center justify-center px-4 lg:px-6 xl:px-8 text-center">
         {% if user.is_authenticated %}
         <a href="{% url 'logout' %}"
             class="font-roboto bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:border-opacity-0 hover:-translate-y-0.5 text-white font-bold px-5 xl:px-7 py-3.5 xl:py-3 rounded duration-200">LogOut</a>
@@ -40,3 +43,11 @@
         {% endif %}
     </div>
 </header>
+
+<div id="header-open" class="fixed flex items-center justify-between top-0 left-0 text-3xl cursor-pointer w-full bg-white m-0 p-0 md:hidden z-40">	
+    <i class="fa fa-bars m-4"></i>
+    <div class="transform -rotate-6 flex-shrink-0 flex-col items-center justify-center px-4 lg:px-6 xl:px-8 py-1.5">
+        <a href="{% url 'home' %}" class="font-pacifico text-indigo-600 text-3xl">sb care</a>
+        <div class="w-3/4 h-1 bg-indigo-700 rounded-md"></div>
+    </div>
+</div> 
