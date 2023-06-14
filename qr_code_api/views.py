@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect
-from django.http import Http404, HttpResponse
+from django.http import Http404
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,7 +9,7 @@ from accounts.authentication import CustomTokenAuthentication
 from .models import QRCode
 from .throttle import QRCodeThrottle
 from .serializers import QRCodeSerializer
-
+from url_short_api.utils import get_token_source
 
 # Create your views here.
 class GetCreateQR(APIView):
@@ -22,7 +21,11 @@ class GetCreateQR(APIView):
     
     
     def get(self, request, format=None):
-        qr = QRCode.objects.filter(user=request.user)
+        source = 'api-service'
+        token = request.META.get('HTTP_AUTHORIZATION')
+        if token:
+            source = get_token_source(token)
+        qr = QRCode.objects.filter(user=request.user, source=source)
         if qr:
             qr_serializer = QRCodeSerializer(qr, many=True)
                 

@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
 from django.conf import settings
 
@@ -12,6 +11,8 @@ from .models import ShortURL
 from .throttle import URLShortCodeThrottle
 from .serializers import ShortURLSerializer
 
+from .utils import get_token_source
+
 # Create your views here.
         
 class GetCreateShortURL(APIView):
@@ -22,7 +23,11 @@ class GetCreateShortURL(APIView):
     throttle_classes = [URLShortCodeThrottle]
 
     def get(self, request, format=None):
-        short_urls = ShortURL.objects.filter(user=request.user)
+        source = 'api-service'
+        token = request.META.get('HTTP_AUTHORIZATION')
+        if token:
+            source = get_token_source(token)
+        short_urls = ShortURL.objects.filter(user=request.user, source=source)
         if short_urls:
             url_serializer = ShortURLSerializer(short_urls, many=True)
                 
@@ -77,6 +82,7 @@ class GetUpdateDeleteShortURL(APIView):
             raise Http404
         except Exception as e:
             print(e)
+    
     
     def get(self, request, pk, format=None):
         short_url = self.get_object(pk, request.user)
