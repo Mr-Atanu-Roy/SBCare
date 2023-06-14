@@ -30,7 +30,7 @@
                     <div>
                         <div class="code-container">
                             <div class="code-header">
-                                <p class="header-item">get short urls</p>
+                                <p class="header-item">get all short urls</p>
                                 <p class="header-item">bash</p>
                             </div>
                             <div class="code-body">
@@ -89,9 +89,71 @@
         </div>
     </div>
 
+    <div id="get-single-short-urls">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Get A Short URL</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">GET</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}r/api/short-url/&ltid&gt</p>
+        </div>
+        <div class="font-semibold">Give details of a short url corresponding to given id</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can get details of your created url having id=5:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">get a short url</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request GET \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}r/api/short-url/5'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">200</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: [</p>
+                                <div class="pl-8">
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">5</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"my short url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}products/url-shorter"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdcKJJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5">],</p>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"data fetched successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="create-short-urls">
         <div class="flex items-end justify-start">
-            <h2 class="text-2xl font-semibold capitalize">Create Short URLs</h2>
+            <h2 class="text-2xl font-semibold capitalize">Create Short URL</h2>
             <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
                 <i class="fa fa-lock mr-1"></i>
                 <span>OAuth 2.0</span>
@@ -104,13 +166,13 @@
         <div class="font-semibold">Create a new short urls</div>
         <div class="mt-6">
             <div>
-                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can create a new short urls:</p>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can create a new short url:</p>
                 
                 <div class="grid grid-cols-2 gap-6">
                     <div>
                         <div class="code-container">
                             <div class="code-header">
-                                <p class="header-item">create short urls</p>
+                                <p class="header-item">create a short url</p>
                                 <p class="header-item">bash</p>
                             </div>
                             <div class="code-body">
@@ -150,6 +212,67 @@
         </div>
     </div>
 
+    <div id="update-short-urls">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Update a Short URL</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">PUT</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}r/api/short-url/&ltid&gt</p>
+        </div>
+        <div class="font-semibold">Update an existing short url corresponding to gievn id. Only title can be updated</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can update one of your existing short url:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">update short url</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request PUT \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}r/api/short-url/10'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span> \</p>
+                                <p class="command">--data <span class="yellow">'{"title": "new title"}'</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">202</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: {</p>
+                                <div class="pl-8">                            
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">10</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"new title"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}auth/dashboard/profile/"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdccfJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-10-11T19:54:16.184745+05:50"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"URL created successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="mt-12 mb-4" id="delete-short-urls" >
         <div id="get-access-token" class="mt-6">
             <div class="flex items-center justify-start">
@@ -170,7 +293,7 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="code-container">
                         <div class="code-header">
-                            <p class="header-item">Delete Access Token</p>
+                            <p class="header-item">Delete A short URL</p>
                             <p class="header-item">bash</p>
                         </div>
                         <div class="code-body">
