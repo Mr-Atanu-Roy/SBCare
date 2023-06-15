@@ -40,7 +40,7 @@ def signup(request):
                         else:
                             if fname != "" and lname != "" and password != "" and cpassword != "":
                                 if check_str_special(fname) or check_str_special(lname):
-                                    messages.error(request, "Special charecters are not allowed in name")
+                                    messages.error(request, "Special characters are not allowed in name")
                                 else:
                                     if password == cpassword:
                                         newUser = User.objects.create_user(email=email, password=password)
