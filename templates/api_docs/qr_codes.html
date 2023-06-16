@@ -1,0 +1,325 @@
+{% extends '../blocks/api_docs_base.html' %}
+
+{% block title %} API Docs Reference-Short Urls | SB Care {% endblock title %}
+
+
+
+
+{% block body %}
+
+<div class="font-roboto">
+
+    <div id="get-all-qr-codes">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Get All QR Codes</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">GET</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}q/api/qr-code</p>
+        </div>
+        <div class="font-semibold">List all the your created qr codes</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can get all your created qr codes:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">get all qr codes</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request GET \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}q/api/qr-code'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">200</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: [</p>
+                                <div class="pl-8">
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">8</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"my short url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}products/url-shorter"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdcKJJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">},</p>
+
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">4</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"another short url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}products/qr-codes"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdc45JT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-05-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">},</p>
+
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">2</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"yet another short url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}auth/dashboard/profile/"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdccfJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-10-11T19:54:16.184745+05:50"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5">],</p>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"data fetched successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="get-single-qr-codes">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Get A QR Code</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">GET</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}q/api/qr-code/&ltid&gt</p>
+        </div>
+        <div class="font-semibold">Give details of a qr code corresponding to given id</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can get details of your qr code having id=5:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">get a qr code</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request GET \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}q/api/qr-code/5'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">200</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: [</p>
+                                <div class="pl-8">
+                                    <p class="command">{</p>
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">5</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"my short url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}products/url-shorter"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdcKJJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-06-10T19:54:16.184745+05:30"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5">],</p>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"data fetched successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="update-qr-codes">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Update A QR Code</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">POST</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}q/api/qr-code/</p>
+        </div>
+        <div class="font-semibold">Create a new qr code</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can create a new qr code:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">create a qr code</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request POST \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}r/api/short-url/'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span> \</p>
+                                <p class="command">--data <span class="yellow">'{"original_url": "YOUR_LONG_URL", "title": "new url"}'</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">201</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: {</p>
+                                <div class="pl-8">                            
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">2</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"new url"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}auth/dashboard/profile/"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdccfJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-10-11T19:54:16.184745+05:50"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"URL created successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-qr-codes">
+        <div class="flex items-end justify-start">
+            <h2 class="text-2xl font-semibold capitalize">Create A QR Code</h2>
+            <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                <i class="fa fa-lock mr-1"></i>
+                <span>OAuth 2.0</span>
+            </div>
+        </div>
+        <div class="flex my-2">
+            <p class="text-teal-700 mr-3 font-bold">PUT</p>
+            <p class="text-yellow-800 font-semibold">{{BASE_URL}}q/api/qr-code/&ltid&gt</p>
+        </div>
+        <div class="font-semibold">Update an existing qr code corresponding to gievn id. Only title can be updated</div>
+        <div class="mt-6">
+            <div>
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can update one of your existing qr code:</p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">update qr code</p>
+                                <p class="header-item">bash</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command"><span class="green">curl</span> --request PUT \</p>
+                                <p class="command">--url <span class="yellow">'{{BASE_URL}}q/api/qr-code/10'</span> \</p>
+                                <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span> \</p>
+                                <p class="command">--data <span class="yellow">'{"title": "new title"}'</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-container">
+                            <div class="code-header">
+                                <p class="header-item">Sample response</p>
+                                <p class="header-item">json</p>
+                            </div>
+                            <div class="code-body">
+                                <p class="command">{</p>
+                                <p class="command pl-2.5"><span class="green">"status"</span>: <span class="yellow">202</span>,</p>
+                                <p class="command pl-2.5"><span class="green">"data"</span>: {</p>
+                                <div class="pl-8">                            
+                                    <p class="command"><span class="green">"id"</span>: <span class="yellow">10</span>,</p>
+                                    <p class="command"><span class="green">"title"</span>: <span class="yellow">"new title"</span>,</p>
+                                    <p class="command"><span class="green">"original_url"</span>: <span class="yellow">"{{BASE_URL}}auth/dashboard/profile/"</span>,</p>
+                                    <p class="command"><span class="green">"short_url"</span>: <span class="yellow">"{{BASE_URL}}r/ZCdccfJT"</span>,</p>
+                                    <p class="command"><span class="green">"source"</span>: <span class="yellow">"api-service"</span>,</p>
+                                    <p class="command"><span class="green">"created_at"</span>: <span class="yellow">"2023-10-11T19:54:16.184745+05:50"</span></p>
+                                    <p class="command">}</p>
+                                </div>
+                                <p class="command pl-2.5"><span class="green">"message"</span>: <span class="yellow">"URL created successfully"</span></p>
+                                <p class="command">}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 mb-4" id="delete-qr-codes">
+        <div id="get-access-token" class="mt-6">
+            <div class="flex items-center justify-start">
+                <h2 class="text-xl font-semibold capitalize">Delete A QR Code</h2>
+                <div class="rounded flex items-center justify-start font-roboto font-light py-1.5 px-2 ml-1.5" style="background-color: rgb(240,235,244);">
+                    <i class="fa fa-lock mr-1"></i>
+                    <span>OAuth 2.0</span>
+                </div>
+            </div>
+            <div class="flex mt-1.5 my-2">
+                <p class="text-teal-700 mr-3 font-bold uppercase">DELETE</p>
+                <p class="text-yellow-800 font-semibold">{{BASE_URL}}q/api/qr-code/&ltid&gt</p>
+            </div>
+            <div class="font-semibold">Delete one of your created qr code</div>
+
+            <div class="mt-6">
+                <p class="text-sm mt-2.5">The following code uses cURL to demonstrate how you can delete a qr code:</p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Delete A qr code</p>
+                            <p class="header-item">bash</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command"><span class="green">curl</span> --request DELETE \</p>
+                            <p class="command">--url <span class="yellow">'{{BASE_URL}}r/api/short-url/12'</span> \</p>
+                            <p class="command">--user <span class="yellow">"Authorization: Token YOUR_ACCESS_TOKEN"</span></p>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <p class="header-item">Sample Responses</p>
+                            <p class="header-item">json</p>
+                        </div>
+                        <div class="code-body">
+                            <p class="command">{</p>
+                            <p class="command"><span class="green">"status"</span>: <span class="yellow">204</span>,</p>
+                            <p class="command"><span class="green">"date"</span>: <span class="yellow">null</span></p>
+                            <p class="command"><span class="green">"message"</span>: <span class="yellow">"deleted successfully"</span></p>
+                            <p class="command">}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}

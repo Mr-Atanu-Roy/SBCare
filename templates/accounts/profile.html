@@ -7,6 +7,33 @@
 <div class="h-full w-full p-6 md:p-8 lg:px-12">
     <div class="flex items-start justify-evenly flex-wrap">
         <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
+            <div class="font-bold text-3xl">
+                {{user_profile.plan | title}}
+            </div>
+            <div class="font-light text-sm mt-2.5 mb-1.5">
+                Currently you have {{user_profile.plan | upper}} plan. You have last paid on {{user_profile.last_paid | date}}
+            </div>
+            <div class="font-light text-sm mt-2.5 mb-1.5">
+                Your Plan Expires on {{user_profile.plan_expires | date}}
+            </div>
+            <div class="flex items-center justify-between">
+                <div>
+                    {% if user_profile.plan_expires <= user_profile.last_paid and user_profile.plan != 'free'  %}
+                    <a href="{% url 'buy_plan' %}?plan={{user_profile.plan}}"
+                        class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Renew
+                    Plan</a>
+                    {% else %}
+                    <a href="{% url 'buy_plan' %}?plan={{user_profile.plan}}"
+                        class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Upgrade
+                    Plan</a>
+                    {% endif %}
+                </div>
+                <div class="w-14 h-14 rounded-full bg-indigo-400 text-xl text-white flex items-center justify-center">
+                    <i class="fa fa-bolt"></i>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
             <div class="font-light text-sm mt-0.5 mb-2.5 text-gray-600">
                 With {{user_profile.plan | title}} plan you can
             </div>
@@ -27,27 +54,6 @@
                 </div>
                 <div class="w-14 h-14 rounded-full bg-indigo-400 text-xl text-white flex items-center justify-center">
                     <i class="fa fa-usd"></i>
-                </div>
-            </div>
-        </div>
-        <div class="p-6 m-6 font-roboto shadow-xl rounded w-full border-t-2 border-indigo-700 max-w-xs">
-            <div class="font-bold text-3xl">
-                {{user_profile.plan | title}}
-            </div>
-            <div class="font-light text-sm mt-2.5 mb-1.5">
-                Currently you have {{user_profile.plan | upper}} plan. You have last paid on {{user_profile.last_paid | date}}
-            </div>
-            <div class="font-light text-sm mt-2.5 mb-1.5">
-                Your Plan Expires on {{user_profile.plan_expires | date}}
-            </div>
-            <div class="flex items-center justify-between">
-                <div>
-                    <a href="{% url 'buy_plan' %}?plan={{user_profile.plan}}"
-                        class="py-2.5 px-3.5 font-roboto text-sm rounded-md capitalize font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out">Upgrade
-                        Plan</a>
-                </div>
-                <div class="w-14 h-14 rounded-full bg-indigo-400 text-xl text-white flex items-center justify-center">
-                    <i class="fa fa-bolt"></i>
                 </div>
             </div>
         </div>

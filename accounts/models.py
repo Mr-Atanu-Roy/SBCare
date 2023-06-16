@@ -91,13 +91,14 @@ class UserToken(BaseModel):
         return str(uuid.uuid4())
     
     def save(self, *args, **kwargs):
-        if self.role == "app-use":
-            # Check if a UserToken with role="app-use" already exists for the user
-            existing_app_use_token = UserToken.objects.filter(user=self.user, role="app-use").first()
-            if existing_app_use_token:
-                raise ValidationError("A UserToken with role='app-use' already exists for this user")
-            
+        #if this instance is being created newly perform this
         if not self.pk:
+            if self.role == "app-use":
+                # Check if a UserToken with role="app-use" already exists for the user
+                existing_app_use_token = UserToken.objects.filter(user=self.user, role="app-use").first()
+                if existing_app_use_token:
+                    raise ValidationError("A UserToken with role='app-use' already exists for this user")
+                
             self.token = self.generate_token()
             
         return super().save(*args, **kwargs)
@@ -171,7 +172,7 @@ def OTP_created_handler(sender, instance, created, *args, **kwargs):
         otp = instance.otp
         if instance.purpose == "reset_password":
             subject = "Reset your account password"
-            message = f"There was a request for reseting your account password for: {instance.user.email}. Reset your by clicking on the given link {settings.BASE_URL}auth/reset-password/{otp}. This link will be expired after 15min."
+            message = f"There was a request for resting your account password for: {instance.user.email}. Reset your by clicking on the given link {settings.BASE_URL}auth/reset-password/{otp}. This link will be expired after 15min."
         else:
             subject = "Please verify your email"
             message = f"Please verify your email : {instance.user.email} by clicking on the given link {settings.BASE_URL}auth/email-verify/{otp}. This link will be expired after 15min."

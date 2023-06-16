@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     
     'url_short_api',
     'qr_code_api',
+    
+    'api_docs',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +82,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                
+                #own
+                'SBCare.context_processors.my_context',
             ],
         },
     },
